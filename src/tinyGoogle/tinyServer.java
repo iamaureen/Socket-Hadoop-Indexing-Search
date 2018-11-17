@@ -39,8 +39,11 @@ public class tinyServer {
                     System.out.println(line); 
                     if(Integer.parseInt(line)==1) {
                     		System.out.println("Call Index Master");
+                    		//create request item object and insert into queue
                     }else if(Integer.parseInt(line)==2) {
                 		System.out.println("Call Query Master");
+                		//create request item object and insert into queue
+                		
                     }
   
                 } 
@@ -66,4 +69,24 @@ public class tinyServer {
         tinyServer server = new tinyServer(5000); 
     } 
 
+}
+
+
+class RequestItem{
+	private String requestType;
+	private String item; // path if index, query if search
+	
+	public String getRequestType() {
+		return requestType;
+	}
+	public void setRequestType(String requestType) {
+		this.requestType = requestType;
+	}
+	public String getItem() {
+		return item;
+	}
+	public void setItem(String item) {
+		this.item = item;
+	}
+		
 }
