@@ -1,0 +1,6 @@
+
+Regular expression for stripping tags:
+<[^>]*>
+
+Note:
+I added the Stanford POS tagger to help us Tokenize the document.
