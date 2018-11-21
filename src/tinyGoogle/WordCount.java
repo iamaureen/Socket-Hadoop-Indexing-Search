@@ -4,6 +4,7 @@ import java.util.*;
 
 public class WordCount {
 	Map<String, Integer> wc = new HashMap<String, Integer>();
+	private StringBuffer tostring;
 	
 	void incrementandAdd(String word){
 		
@@ -22,14 +23,18 @@ public class WordCount {
 				this.wc.put(s, this.wc.get(s)+obj.wc.get(s));
 			}
 		}
-		
-		
 	}
 	
 	//add toString
+	public String convertToString() {
+		return (this.wc).toString();
+	}
 	
 	//add from String to convert to wc object
 	
+	
+	
+
 	void split() {
 		//returns a list of WC objects for each word
 	}

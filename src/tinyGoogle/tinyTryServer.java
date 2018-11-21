@@ -49,10 +49,10 @@ public class tinyTryServer {
                     
                     obj1.merge(obj2);                      
                     obj1.printWordCount();
-                   
                     
-                                 
-            			
+                    System.out.println(obj1.convertToString());;
+                   
+                  
                     if(Integer.parseInt(line)==1) {
                     		System.out.println("Call Index Master");
                     		//create request item object and insert into queue
