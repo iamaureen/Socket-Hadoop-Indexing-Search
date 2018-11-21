@@ -1,6 +1,7 @@
 package tinyGoogle;
 
 import java.io.*;
+import java.util.*; 
 import java.net.*;
 
 public class tinyServer {
@@ -9,6 +10,7 @@ public class tinyServer {
     private Socket          socket   = null; 
     private ServerSocket    server   = null; 
     private DataInputStream in       =  null; 
+    private Queue<RequestItem> requestQueue = new LinkedList<>(); ;
   
     // constructor with port 
     public tinyServer(int port) 
@@ -39,8 +41,29 @@ public class tinyServer {
                     System.out.println(line); 
                     if(Integer.parseInt(line)==1) {
                     		System.out.println("Call Index Master");
+                    		//create request item object and insert into queue
+                    		RequestItem ri = new RequestItem();
+                    		
+                    		ri.setRequestType("index");
+                    		ri.setItem("index"); //path 
+                    		
+                    		requestQueue.add(ri);
+                    		
+                    		System.out.println("Elements of queue-"+requestQueue);
+                    		
                     }else if(Integer.parseInt(line)==2) {
-                		System.out.println("Call Query Master");
+	                		System.out.println("Call Query Master");
+	                		//create request item object and insert into queue
+	                		
+	                		RequestItem ri = new RequestItem();
+                    		
+                    		ri.setRequestType("query");
+                    		ri.setItem("query"); //path 
+                    		
+                    		requestQueue.add(ri);
+                    		
+                    		System.out.println("Elements of queue-"+requestQueue);
+                		
                     }
   
                 } 
@@ -66,4 +89,29 @@ public class tinyServer {
         tinyServer server = new tinyServer(5000); 
     } 
 
+}
+
+
+class RequestItem{
+	private String requestType;
+	private String item; // path if index, query if search
+	
+	public String getRequestType() {
+		return requestType;
+	}
+	public void setRequestType(String requestType) {
+		this.requestType = requestType;
+	}
+	public String getItem() {
+		return item;
+	}
+	public void setItem(String item) {
+		this.item = item;
+	}
+	
+	@Override
+	  public String toString() {
+	    return getRequestType() + " "+ getItem();
+	  }
+		
 }
