@@ -1,4 +1,4 @@
-package tinyGoogle;
+package Utility;
 
 import java.util.*;
 
