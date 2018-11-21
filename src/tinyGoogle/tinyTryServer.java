@@ -42,7 +42,15 @@ public class tinyTryServer {
                     System.out.println(line); 
                     
                     String input = "this is a string string";
-                    convertStringToWordCountObj(input);
+                    WordCount obj1 = convertStringToWordCountObj(input);
+                    
+                    String input1 = "this this is a string mau";
+                    WordCount obj2 = convertStringToWordCountObj(input1);
+                    
+                    obj1.merge(obj2);                      
+                    obj1.printWordCount();
+                   
+                    
                                  
             			
                     if(Integer.parseInt(line)==1) {
@@ -103,7 +111,7 @@ public class tinyTryServer {
         
     } 
     
-    static void convertStringToWordCountObj(String input) {
+    static WordCount convertStringToWordCountObj(String input) {
     	
     	String[] stringinput = input.split("\\s+"); // splits by whitespace
         
@@ -111,7 +119,10 @@ public class tinyTryServer {
         for (String word: stringinput) {
         		wcObj.incrementandAdd(word);
         }
-        wcObj.printWordCount();
+        //wcObj.printWordCount();
+        
+        return wcObj;
+       
     		
     }
 
