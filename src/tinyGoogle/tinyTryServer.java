@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 
-public class tinyServer {
+public class tinyTryServer {
 	
 	 //initialize socket and input stream 
     private Socket          socket   = null; 
@@ -13,7 +13,7 @@ public class tinyServer {
     private Queue<RequestItem> requestQueue = new LinkedList<>(); ;
   
     // constructor with port 
-    public tinyServer(int port) 
+    public tinyTryServer(int port) 
     { 
         // starts server and waits for a connection 
         try
@@ -40,17 +40,28 @@ public class tinyServer {
                 { 
                     line = in.readUTF(); 
                     System.out.println(line); 
+                    
+                    String input = "this is a string string";
+                    convertStringToWordCountObj(input);
+                                 
+            			
                     if(Integer.parseInt(line)==1) {
                     		System.out.println("Call Index Master");
                     		//create request item object and insert into queue
-                    		RequestItem ri = new RequestItem();
                     		
-                    		ri.setRequestType("index");
-                    		ri.setItem("index"); //path 
                     		
-                    		requestQueue.add(ri);
-                    		
-                    		System.out.println("Elements of queue-"+requestQueue);
+//                    		RequestItem ri = new RequestItem();
+//                    		
+//                    		ri.setRequestType("index");
+//                    		ri.setItem("index"); //path 
+//                    		
+//                    		requestQueue.add(ri);
+//                    		
+//                    		System.out.println("Elements of queue-"+requestQueue);
+//                    		
+//                    		DocumentIndexer di = new DocumentIndexer();
+//                    		di.setDocId(1);
+//                    		System.out.println("doc id :: "+di.getDocId());
                     		
                     }else if(Integer.parseInt(line)==2) {
 	                		System.out.println("Call Query Master");
@@ -87,32 +98,24 @@ public class tinyServer {
   
     public static void main(String args[]) 
     { 
-        tinyServer server = new tinyServer(5000); 
+        tinyTryServer server = new tinyTryServer(5000); 
+        
+        
     } 
+    
+    static void convertStringToWordCountObj(String input) {
+    	
+    	String[] stringinput = input.split("\\s+"); // splits by whitespace
+        
+        WordCount wcObj = new WordCount();
+        for (String word: stringinput) {
+        		wcObj.incrementandAdd(word);
+        }
+        wcObj.printWordCount();
+    		
+    }
 
 }
 
 
-class RequestItem{
-	private String requestType;
-	private String item; // path if index, query if search
-	
-	public String getRequestType() {
-		return requestType;
-	}
-	public void setRequestType(String requestType) {
-		this.requestType = requestType;
-	}
-	public String getItem() {
-		return item;
-	}
-	public void setItem(String item) {
-		this.item = item;
-	}
-	
-	@Override
-	  public String toString() {
-	    return getRequestType() + " "+ getItem();
-	  }
-		
-}
+
