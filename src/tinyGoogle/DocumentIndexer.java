@@ -9,6 +9,7 @@ public class DocumentIndexer {
 		return DocId;
 	}
 	public void setDocId(int docId) {
+		
 		DocId = docId;
 	}
 	public String getDocPath() {
@@ -17,6 +18,9 @@ public class DocumentIndexer {
 	public void setDocPath(String docPath) {
 		DocPath = docPath;
 	}
+	
+	
+	
 	
 
 }

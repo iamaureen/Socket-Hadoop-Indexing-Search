@@ -50,7 +50,9 @@ public class tinyTryServer {
                     obj1.merge(obj2);                      
                     obj1.printWordCount();
                     
-                    System.out.println(obj1.convertToString());;
+                    System.out.println(obj1.convertToString());
+                    
+                    obj1.extract('i','s');
                    
                   
                     if(Integer.parseInt(line)==1) {
