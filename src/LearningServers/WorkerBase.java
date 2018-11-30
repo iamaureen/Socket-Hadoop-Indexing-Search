@@ -8,6 +8,7 @@ public class WorkerBase {
 	
 	//each worker will will have a server to communicate with the other servers
 	
+	//mapper will become server
 	public String workerName = "w-" +UUID.randomUUID().toString();
 	
 	public static void main(String[] args) {

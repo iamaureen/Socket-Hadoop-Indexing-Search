@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class MasterConnectionThread extends Thread {
 	protected Socket socket;
+	private ArrayList<String> WorkIDBuffer = new ArrayList<String>();
+	private ArrayList<Object> outbox;
 
 	public MasterConnectionThread(Socket clientSocket) {
 		this.socket = clientSocket;
@@ -47,8 +50,7 @@ public class MasterConnectionThread extends Thread {
 
 					}
 				} else {
-					System.err.println("Something came that I could not handle");
-					System.out.println(obj);
+					this.giveWorkToMaster(obj);
 
 				}
 			} catch (IOException | ClassNotFoundException e) {
@@ -57,5 +59,18 @@ public class MasterConnectionThread extends Thread {
 			}
 
 		}
+	}
+
+	private void giveWorkToMaster(Object obj) {
+		String otherID = ((Work) obj).getId();
+		
+		if(!this.WorkIDBuffer.contains(otherID)) {
+			Master.WorkQueue.add(obj);
+			this.WorkIDBuffer.add(otherID);
+			if(this.WorkIDBuffer.size()>15) {
+				this.WorkIDBuffer.remove(0);
+			}
+		}
+
 	}
 }

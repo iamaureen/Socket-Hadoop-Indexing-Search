@@ -3,7 +3,7 @@ package LearningServers;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Job implements Serializable {
+public class Job extends Work implements Serializable {
 
 	/**
 	 * 
@@ -15,7 +15,7 @@ public class Job implements Serializable {
 	private boolean isIndexJob;
 	private String targetValue;
 	//target Value is either a the document path or the search terms, depending on if the job is an index or a search
-	private String jobId;
+	private String id;
 	private String[] workerArray;
 	// an array of tall the worker names
 	private String[] mapTasks;
@@ -25,7 +25,7 @@ public class Job implements Serializable {
 
 	public Job(String dP, boolean isJobIndex) {
 		setTargetValue(dP);
-		setJobId(UUID.randomUUID().toString());
+		setId(UUID.randomUUID().toString());
 
 		isIndexJob = isJobIndex;
 	}
@@ -62,12 +62,12 @@ public class Job implements Serializable {
 		this.reduceTasks = reduceTasks;
 	}
 
-	public String getJobId() {
-		return jobId;
+	public String getId() {
+		return id;
 	}
 
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

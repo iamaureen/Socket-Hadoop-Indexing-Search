@@ -48,7 +48,6 @@ public class IIInterface {
 			toSave.close();
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -77,7 +76,6 @@ public class IIInterface {
 			retval =  br.readLine();
 			br.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -1,11 +1,10 @@
 package LearningServers;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+
 
 public class Master {
 
@@ -13,28 +12,23 @@ public class Master {
 			.synchronizedList(new ArrayList<MasterConnectionThread>());
 	public static List<MasterConnectionThread> ClientList = Collections
 			.synchronizedList(new ArrayList<MasterConnectionThread>());
+	
+	public static LinkedBlockingQueue<Object> WorkQueue = new LinkedBlockingQueue<Object>();
 	public final static int PORT = 12345;
 
 	public static void main(String[] args) {
-		ServerSocket serverSock = null;
-		Socket sock = null;
-
-		try {
-			serverSock = new ServerSocket(PORT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println("started server");
-		while (true) {
-			serverSock.
+		new MasterServerThread().run();
+		
+		//loop through a queue to handle requests
+		while(true) {
+			//handle request
 			try {
-				sock = serverSock.accept();
-			} catch (IOException e) {
-				System.out.println("I/O error: " + e);
+				System.out.println(WorkQueue.take());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-			// new thread for a client
-			new MasterConnectionThread(sock).start();
 		}
+		
 
 	}
 
