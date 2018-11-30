@@ -32,13 +32,14 @@ public class DocumentIndexer {
 			br.readLine(); //consume the first line and ignore
 
 			while ((sCurrentLine = br.readLine()) != null) {
-				System.out.println(sCurrentLine);
+				//System.out.println(sCurrentLine);
 				String[] sp = sCurrentLine.split(" ");
 				
 				//insert into the list
 				DocumentIndex di = new DocumentIndex();
 				di.setDocId(Integer.parseInt(sp[0]));
 				di.setDocPath(sp[1]);
+				
 				
 				DocIdList.add(di);
 				
@@ -65,7 +66,7 @@ public class DocumentIndexer {
 		}	
 	}
 	
-	public boolean isDocumentPresent(int id) {
+	public boolean isDocumentPresentByID(int id) {
 		
 		for(int i = 0; i < DocIdList.size(); i++)
 		{
@@ -79,11 +80,36 @@ public class DocumentIndexer {
 		
 	}
 	
+	public boolean isDocumentPresentByPath(String path) {
+		
+		for(int i = 0; i < DocIdList.size(); i++)
+		{
+		    System.out.println(DocIdList.get(i).getDocPath());
+		    if(DocIdList.get(i).getDocPath().trim().equals(path)) {
+		    		return true; //return DocIdList.get(i).getDocPath();
+		    }
+		}
+		
+		return false; //file id is not in the list
+		
+	}
+	
+	
+	
+	public void addFiletoDocumentIndex(String path) {
+		if(!isDocumentPresentByPath(path)) {
+			//add in the document
+			//get the max id, add 1 to it and write to the file
+		}
+		
+		
+	}
+	
 	 public static void main(String[] args) {
 		 //when DocumentIndexer is called it parses through the document and makes a list of existing documents
 		 DocumentIndexer d = new DocumentIndexer();
 		 
-		 System.out.print(d.isDocumentPresent(1));
+		 System.out.print(d.isDocumentPresentByPath("harrypotter"));
 	       
 	  }
 
