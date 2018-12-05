@@ -83,42 +83,26 @@ public class wordTokenizer {
 		
 		//replace punctuation
 		//https://www.geeksforgeeks.org/removing-punctuations-given-string/
-		content = content.replaceAll("\\p{Punct}","");
+		content = content.replaceAll("\\p{Punct}","").replaceAll("\\n", " ").replaceAll("\\s+", " ").toLowerCase();
 		
 		//get the stop words
-		Set<String> stopwords = new HashSet<>();
-		stopwords = getStopWords();
+		Set<String> stopwords = getStopWords();
 		
 		//remove stopwords from the content
-		String[] contentArray = content.replace('\n', ' ').split(" ");
+		String[] contentArray = content.split(" ");
 		StringBuilder withoutStopWords = new StringBuilder();
 		for (String s : contentArray) {
 		    if(!stopwords.contains(s)) {
 		    		withoutStopWords.append(s+' ');
 		    }
 		}
+		//content without the stop words 
 		content = withoutStopWords.toString();
 		System.out.println(content);
-		
-		
-		//make a reader object to pass through the tokenizer
-		Reader reader = new StringReader(content);
-		
-		//https://nlp.stanford.edu/software/tokenizer.shtml#Obtaining
-		PTBTokenizer<CoreLabel> ptbt = new PTBTokenizer<>(reader,
-	              new CoreLabelTokenFactory(), "");
-	     
-		  StringBuilder tokenizedInput = new StringBuilder();
-	      while (ptbt.hasNext()) {
-	        CoreLabel tokens = ptbt.next();
-	        
-	        System.out.println(tokens);
-	        tokenizedInput.append(tokens.toString() + ' ');
-	      }
 	      
 	      //create word count object
 	      WordCount wcObj = new WordCount();
-	      String[] tokenizedInputArray = tokenizedInput.toString().split("\\s+");
+	      String[] tokenizedInputArray = content.split("\\s+");
 	        for (String word: tokenizedInputArray) {
 	        		wcObj.incrementandAdd(word);
 	        }
