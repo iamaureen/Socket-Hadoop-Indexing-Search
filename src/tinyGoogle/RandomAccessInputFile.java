@@ -1,6 +1,7 @@
 package tinyGoogle;
 
 import java.io.*;
+import tinyGoogle.wordTokenizer;
 
 public class RandomAccessInputFile {
 	
@@ -28,7 +29,7 @@ public class RandomAccessInputFile {
         return stringArray.length;
 	}
 	
-	 static void sendToWorker(int worker, int startPosition, int endPosition) throws IOException{
+	 static String sendToWorker(int worker, int startPosition, int endPosition) throws IOException{
 		 String filePath = getFilePath();
 		 RandomAccessFile raf = new RandomAccessFile(filePath, "r");
 		 int position = startPosition;
@@ -38,12 +39,15 @@ public class RandomAccessInputFile {
 		 System.out.println(length + " "+ raf.length());
 		 raf.seek(position);
 		 
-		 System.out.println("i am here, where are you? here???"
-		 		+ raf.read(readData, position, length));
+		 //System.out.println("i am here, where are you? here???"+ raf.read(readData, position, length));
 		 
-		 System.out.println("Did I read anything?\n" + new String(readData, "UTF-8"));
+		 raf.read(readData, position, length);
+		 String sendToWorkerContent = new String(readData, "UTF-8");
+		 //System.out.println("Did I read anything?\n" + sendToWorkerContent);
 		 
 		 raf.close();
+		 
+		 return sendToWorkerContent;
 		 
 	 }
 	
@@ -58,10 +62,14 @@ public class RandomAccessInputFile {
             //first step - count number of lines
             int numberOfLine = countLines(filePath);
             
-            sendToWorker(1, 0, 341);
+            
+            System.out.println(sendToWorker(1, 0, 341));
             System.out.println("something");
-            sendToWorker(1, 341, 677);
-           
+            System.out.println(sendToWorker(1, 341, 677));
+            
+           //worker will tokenize the content
+            wordTokenizer.processContent(sendToWorker(1, 341, 677));
+            
             
             
 //            
@@ -100,7 +108,8 @@ public class RandomAccessInputFile {
         } catch (Exception e) {
         }
     }
-	
+
+
 	
 	
 

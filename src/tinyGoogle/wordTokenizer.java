@@ -10,7 +10,6 @@ import java.io.StringReader;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.PTBTokenizer;
-import edu.stanford.nlp.process.TokenizerFactory;
 
 
 public class wordTokenizer {
@@ -45,12 +44,9 @@ public class wordTokenizer {
 	    return content.toString();
 	}
 	
-	
-	
-	public static void main(String[] args) throws FileNotFoundException {
-		
+	public static void processContent(String content) {
 		//read the content of the file
-		String content = readFile();
+		//String content = readFile();
 		
 		//replace punctuation
 		//https://www.geeksforgeeks.org/removing-punctuations-given-string/
@@ -71,6 +67,18 @@ public class wordTokenizer {
 	        
 	        System.out.println(tokens);
 	      }
-	   }
+			   
+	}
+	
+	
+	
+	
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		String content = readFile();
+		processContent(content);
+	}
+		
+		
 
 }
