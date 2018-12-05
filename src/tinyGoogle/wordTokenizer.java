@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
@@ -14,9 +16,15 @@ import edu.stanford.nlp.process.PTBTokenizer;
 
 public class wordTokenizer {
 	
-	public static String getFilePath() {
+	
+	
+	wordTokenizer(){
+		
+	}
+	
+	public static String getFilePath(String filename) {
 	 	String workingDirectoty = System.getProperty("user.dir");
-		String fileName = "sampleinput.txt";
+		String fileName = filename;
 		String filePath = workingDirectoty+"/src/tinyGoogle/" + fileName;
 		
 		System.out.println("Working Directory = " + filePath);
@@ -27,7 +35,7 @@ public class wordTokenizer {
 	public static String readFile() {
 		StringBuilder content = new StringBuilder();
 		
-		String filePath = getFilePath();
+		String filePath = getFilePath("sampleinput.txt");
 	    try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
 	    {
 	 
@@ -44,6 +52,31 @@ public class wordTokenizer {
 	    return content.toString();
 	}
 	
+	public static Set<String> getStopWords() {
+		
+		Set<String> stopwords = new HashSet<>();
+		//list of stopwords - https://gist.github.com/larsyencken/1440509
+		String filePath = getFilePath("stopwords.txt");
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
+	    {
+	 
+	        String sCurrentLine;
+	        while ((sCurrentLine = br.readLine()) != null)
+	        {
+	        		//System.out.println(sCurrentLine);
+	         	stopwords.add(sCurrentLine);
+	        }
+	    }
+	    catch (IOException e)
+	    {
+	        e.printStackTrace();
+	    }
+		
+		return stopwords;
+		
+	}
+	
 	public static void processContent(String content) {
 		//read the content of the file
 		//String content = readFile();
@@ -52,9 +85,22 @@ public class wordTokenizer {
 		//https://www.geeksforgeeks.org/removing-punctuations-given-string/
 		content = content.replaceAll("\\p{Punct}","");
 		
-		//replace stopwords
-		String stopWords = "I|its|with|but|the|a|of|and|are|about";
-		content = content.replaceAll("(" + stopWords + ")\\s*", "");
+		//get the stop words
+		Set<String> stopwords = new HashSet<>();
+		stopwords = getStopWords();
+		
+		//remove stopwords from the content
+		String[] contentArray = content.replace('\n', ' ').split(" ");
+		StringBuilder withoutStopWords = new StringBuilder();
+		for (String s : contentArray) {
+		    if(!stopwords.contains(s)) {
+		    		withoutStopWords.append(s+' ');
+		    }
+		}
+		content = withoutStopWords.toString();
+		System.out.println(content);
+		
+		
 		//make a reader object to pass through the tokenizer
 		Reader reader = new StringReader(content);
 		
@@ -69,9 +115,6 @@ public class wordTokenizer {
 	      }
 			   
 	}
-	
-	
-	
 	
 	
 	public static void main(String[] args) throws FileNotFoundException {
