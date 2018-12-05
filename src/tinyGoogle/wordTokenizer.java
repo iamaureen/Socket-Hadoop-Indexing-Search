@@ -53,8 +53,12 @@ public class wordTokenizer {
 		String content = readFile();
 		
 		//replace punctuation
+		//https://www.geeksforgeeks.org/removing-punctuations-given-string/
 		content = content.replaceAll("\\p{Punct}","");
 		
+		//replace stopwords
+		String stopWords = "I|its|with|but|the|a|of|and|are|about";
+		content = content.replaceAll("(" + stopWords + ")\\s*", "");
 		//make a reader object to pass through the tokenizer
 		Reader reader = new StringReader(content);
 		
@@ -63,9 +67,9 @@ public class wordTokenizer {
 	              new CoreLabelTokenFactory(), "");
 	     
 	      while (ptbt.hasNext()) {
-	        CoreLabel label = ptbt.next();
+	        CoreLabel tokens = ptbt.next();
 	        
-	        System.out.println(label);
+	        System.out.println(tokens);
 	      }
 	   }
 
