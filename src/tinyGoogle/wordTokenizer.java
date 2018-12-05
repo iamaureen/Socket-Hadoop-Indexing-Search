@@ -108,12 +108,23 @@ public class wordTokenizer {
 		PTBTokenizer<CoreLabel> ptbt = new PTBTokenizer<>(reader,
 	              new CoreLabelTokenFactory(), "");
 	     
+		  StringBuilder tokenizedInput = new StringBuilder();
 	      while (ptbt.hasNext()) {
 	        CoreLabel tokens = ptbt.next();
 	        
 	        System.out.println(tokens);
+	        tokenizedInput.append(tokens.toString() + ' ');
 	      }
-			   
+	      
+	      //create word count object
+	      WordCount wcObj = new WordCount();
+	      String[] tokenizedInputArray = tokenizedInput.toString().split("\\s+");
+	        for (String word: tokenizedInputArray) {
+	        		wcObj.incrementandAdd(word);
+	        }
+			wcObj.printWordCount();
+			
+			//return wcObj;
 	}
 	
 	
