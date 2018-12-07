@@ -1,19 +1,12 @@
 package tinyGoogle;
 
 import java.io.*;
+import tinyGoogle.utility;
 import tinyGoogle.wordTokenizer;
 
 public class RandomAccessInputFile {
 	
-	public static String getFilePath() {
-	 	String workingDirectoty = System.getProperty("user.dir");
-		String fileName = "sampleinput.txt";
-		String filePath = workingDirectoty+"/src/tinyGoogle/" + fileName;
-		
-		System.out.println("Working Directory = " + filePath);
-		
-		return filePath;
-	}
+	
 	
 	static int countLines (String filePath) throws IOException {
 		
@@ -29,8 +22,8 @@ public class RandomAccessInputFile {
         return stringArray.length;
 	}
 	
-	 static String sendToWorker(int worker, int startPosition, int endPosition) throws IOException{
-		 String filePath = getFilePath();
+	 static String sendToWorker(int worker, String filename, int startPosition, int endPosition) throws IOException{
+		 String filePath = utility.getFilePath(filename);
 		 RandomAccessFile raf = new RandomAccessFile(filePath, "r");
 		 int position = startPosition;
 		 byte[] readData = new byte[(int) raf.length()];
@@ -52,7 +45,8 @@ public class RandomAccessInputFile {
 	 }
 	
 	public static void main(String[] args) {
-		String filePath = getFilePath();
+		String filename = "sampleinput.txt";
+		String filePath = utility.getFilePath(filename);
         try {
             File file = new File(filePath);
             
@@ -62,13 +56,12 @@ public class RandomAccessInputFile {
             //first step - count number of lines
             int numberOfLine = countLines(filePath);
             
-            
-            System.out.println(sendToWorker(1, 0, 341));
-            System.out.println("something");
-            System.out.println(sendToWorker(1, 341, 677));
+            //System.out.println(sendToWorker(1, filename, 0, 341));
+            //System.out.println("something");
+            System.out.println(sendToWorker(1, filename, 341, 677));
             
            //worker will tokenize the content
-            wordTokenizer.processContent(sendToWorker(1, 341, 677));
+            wordTokenizer.processContent(sendToWorker(1, filename, 341, 677));
             
             
             

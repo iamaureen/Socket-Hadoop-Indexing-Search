@@ -22,20 +22,12 @@ public class wordTokenizer {
 		
 	}
 	
-	public static String getFilePath(String filename) {
-	 	String workingDirectoty = System.getProperty("user.dir");
-		String fileName = filename;
-		String filePath = workingDirectoty+"/src/tinyGoogle/" + fileName;
-		
-		System.out.println("Working Directory = " + filePath);
-		
-		return filePath;
-	}
+	
 	
 	public static String readFile() {
 		StringBuilder content = new StringBuilder();
 		
-		String filePath = getFilePath("sampleinput.txt");
+		String filePath = utility.getFilePath("sampleinput.txt");
 	    try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
 	    {
 	 
@@ -56,7 +48,7 @@ public class wordTokenizer {
 		
 		Set<String> stopwords = new HashSet<>();
 		//list of stopwords - https://gist.github.com/larsyencken/1440509
-		String filePath = getFilePath("stopwords.txt");
+		String filePath = utility.getFilePath("stopwords.txt");
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
 	    {
