@@ -58,23 +58,33 @@ public class RandomAccessInputFile {
             
             //System.out.println(sendToWorker(1, filename, 0, 341));
             //System.out.println("something");
-            System.out.println(sendToWorker(1, filename, 341, 677));
+            //System.out.println(sendToWorker(1, filename, 341, 677));
             
            //worker will tokenize the content
             wordTokenizer.processContent(sendToWorker(1, filename, 341, 677));
             
             
             
-//            
-            // create a new RandomAccessFile with filename test
+////            
+//            // create a new RandomAccessFile with filename test
 //            RandomAccessFile raf = new RandomAccessFile(filePath, "rw");
 //            String line;
 //            
-//            int count = 4;
-//            int i = 0;
+//            int count = 3;
+//            int i = 1;
 //            
 //            while ((line = raf.readLine()) != null) {
-//            		System.out.println("" + raf.getFilePointer());
+//            		
+//            		int pointer = (int) (long) (raf.getFilePointer());
+//            		System.out.println("" + pointer);
+//            		raf.seek(raf.getFilePointer());
+//            		System.out.println(raf.readLine());
+//            		
+//            		i++;
+//            		if(i==3) {
+//            			System.out.println("byebye"+raf.getFilePointer());
+//            			break;
+//            		}
 //            	
 //            }
 //       
