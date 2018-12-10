@@ -14,14 +14,19 @@ public class Master {
 			.synchronizedList(new ArrayList<MasterConnectionThread>());
 	
 	public static LinkedBlockingQueue<Object> WorkQueue = new LinkedBlockingQueue<Object>();
+		//contains Request Objects and Job Objects
+		//
 	public final static int PORT = 12345;
 
 	public static void main(String[] args) {
-		new MasterServerThread().run();
+		new MasterServerThread().start();
 		
 		//loop through a queue to handle requests
 		while(true) {
 			//handle request
+			//TODO change this to handle work distribution
+			//If it is a Request send the job to worksers
+			//if it is a job complete send the result to clients
 			try {
 				System.out.println(WorkQueue.take());
 			} catch (InterruptedException e) {

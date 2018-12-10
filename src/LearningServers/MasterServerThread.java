@@ -28,7 +28,7 @@ public class MasterServerThread extends Thread {
 				e.printStackTrace();
 			}
 
-			// new thread for a client
+			// new thread for a client and worker input and output.
 			new MasterConnectionThread(sock).start();
 		}
 	}

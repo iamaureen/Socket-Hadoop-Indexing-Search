@@ -6,14 +6,40 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MasterConnectionThread extends Thread {
 	protected Socket socket;
 	private ArrayList<String> WorkIDBuffer = new ArrayList<String>();
-	private ArrayList<Object> outbox;
+	private Queue<Object> outbox;
+	private Queue<Object> inbox;
+	private int workerBufferSize = 15;
 
 	public MasterConnectionThread(Socket clientSocket) {
 		this.socket = clientSocket;
+		this.outbox = new ConcurrentLinkedQueue<Object>();
+		this.inbox = new ConcurrentLinkedQueue<Object>();
+	}
+
+	public boolean placeInOutbox(Object toSend) {
+		try {
+			return this.outbox.add(toSend);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean placeInInbox(Object toReceive) {
+		try {
+			return this.inbox.add(toReceive);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public void run() {
@@ -21,39 +47,38 @@ public class MasterConnectionThread extends Thread {
 		InputStream inp = null;
 		ObjectInputStream in = null;
 		ObjectOutputStream out = null;
+		InputStreamThread ist = null;
 		try {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			inp = socket.getInputStream();
 			in = new ObjectInputStream(inp);
+			ist = new InputStreamThread(in, this);
+			ist.start();
 		} catch (IOException e) {
 			return;
 		}
 
-		// Here is the communication
+		// Here is the communication loop
 		Object obj;
 		while (true) {
 			try {
 				// parse input
-				String line = "";
-				obj = in.readObject();
-				if (obj.getClass() == String.class) {
-					line = (String) obj;
-					// do something
-					if ((line == null) || line.trim().equalsIgnoreCase("QUIT")) {
-						System.out.println(line);
-						socket.close();
-						return;
-					}
-					if (line.equalsIgnoreCase("worker") || line.equalsIgnoreCase("client")) {
-						Master.addConnection(this, line);
+				obj = this.inbox.poll();
 
-					}
-				} else {
-					this.giveWorkToMaster(obj);
-
+				if (obj != null) {
+					this.handleInput(obj);
 				}
-			} catch (IOException | ClassNotFoundException e) {
+
+				// handle output
+				// get front of queue
+				Object send = this.outbox.poll();
+				// type check and send
+				if (send != null) {
+					out.writeObject(send);
+				}
+
+			} catch (IOException e) {
 				e.printStackTrace();
 				return;
 			}
@@ -61,16 +86,65 @@ public class MasterConnectionThread extends Thread {
 		}
 	}
 
+	//TODO might need to change this method if we change our inputs
+	private void handleInput(Object obj) throws IOException {
+		String line = "";
+		if (obj.getClass() == String.class) {
+			line = (String) obj;
+			// do something
+			if ((line == null) || line.trim().equalsIgnoreCase("QUIT")) {
+				System.out.println(line);
+				this.socket.close();
+				return;
+			}
+			if (line.equalsIgnoreCase("worker") || line.equalsIgnoreCase("client")) {
+				Master.addConnection(this, line);
+
+			}
+		} else {
+			this.giveWorkToMaster(obj);
+		}
+
+	}
+	
+	//TODO might need to change this method if we change our inputs
 	private void giveWorkToMaster(Object obj) {
-		String otherID = ((Work) obj).getId();
-		
-		if(!this.WorkIDBuffer.contains(otherID)) {
+		Work wobj = ((Work) obj);
+		String otherID = wobj.getId();
+		wobj.setMct(this);
+
+		if (!this.WorkIDBuffer.contains(otherID)) {
 			Master.WorkQueue.add(obj);
 			this.WorkIDBuffer.add(otherID);
-			if(this.WorkIDBuffer.size()>15) {
+			if (this.WorkIDBuffer.size() > this.workerBufferSize) {
 				this.WorkIDBuffer.remove(0);
 			}
 		}
 
 	}
+}
+
+class InputStreamThread extends Thread {
+
+	private ObjectInputStream ois = null;
+	private MasterConnectionThread hostThread = null;
+
+	public InputStreamThread(ObjectInputStream val, MasterConnectionThread host) {
+		ois = val;
+		hostThread = host;
+	}
+
+	public void run() {
+		try {
+			boolean result = false;
+			Object val = ois.readObject();
+			do {
+				result = hostThread.placeInInbox(val);
+			} while (!result);
+
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
