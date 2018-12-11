@@ -8,9 +8,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import tinyGoogle.DocumentIndexer;
 import tinyGoogle.IIInterface;
-import tinyGoogle.RandomAccessInputFile;
+import tinyGoogle.FileHandler;
 import tinyGoogle.WCPair;
 import tinyGoogle.WordCount;
+import tinyGoogle.utility;
 import tinyGoogle.wordTokenizer;
 
 public class WorkerBase {
@@ -18,18 +19,19 @@ public class WorkerBase {
 	// This is a worker base and is supposed to template how a worker is supposed to
 	// handle communication.
 
-	// each worker will will have a server to communicate with the other servers
-
-	// mapper will become server
 	public static String workerName = "w-" + UUID.randomUUID().toString();
 	public static LinkedBlockingQueue<Object> JobQueue = new LinkedBlockingQueue<Object>();
 
 	public static void main(String[] args) {
+		
 		// first thing to do is connect to the master server
 		// and we will have a thread for that
 		WorkerToMasterThread commThread = new WorkerToMasterThread();
 		commThread.start();
 
+		//instantiate the II structure.
+		IIInterface.setupStructure(utility.getBasePath());
+		
 		// we will now enter the work loop
 
 		boolean retry = false;
@@ -63,6 +65,7 @@ public class WorkerBase {
 						}
 
 						// break apart and save
+						//(This is where the real shuffling with the sockets would come into play 
 						for (String reduceTask : ActiveJob.getReduceTasks()) {
 							content = reduceTask.split("|");
 							WordCount toSave = wc.extract(content[1].charAt(0), content[2].charAt(0));
@@ -231,7 +234,7 @@ public class WorkerBase {
 
 	public static WordCount countWords(String path, int start, int end) {
 		try {
-			String toParse = RandomAccessInputFile.sendToWorker(path, start, end);
+			String toParse = FileHandler.sendToWorker(path, start, end);
 			return wordTokenizer.processContent(toParse);
 
 		} catch (IOException e) {

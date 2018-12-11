@@ -4,6 +4,7 @@ import java.io.File;
 
 public class utility {
 	private static String jobDir = null;
+	private static String basePath = ".";
 
 	//return the file path when a filename is given
 	public static String getFilePath(String filename) {
@@ -26,6 +27,10 @@ public class utility {
 			return null;
 		}
 		return jobDir;
+	}
+
+	public static String getBasePath() {
+		return basePath ;
 	}
 	
 }

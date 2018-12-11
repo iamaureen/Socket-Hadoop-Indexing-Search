@@ -1,11 +1,28 @@
 package LearningServers;
 
-public class JobCoordinator {
+import java.util.ArrayList;
 
-	//This JobCoordinator creates jobs and sends them to registered workers.
-	public static void main(String[] args) {
-		// TODO Auto-generated method stubs
+public class JobCoordinator extends Thread {
 
+	//This JobCoordinator creates jobs and sends them to registered workers and waits until the job is completed.
+	private Job MyJob = null;
+	
+	public JobCoordinator() {
+	
+		
 	}
+	
+	public String initJob(boolean indexJob, String criteria) {
+		MyJob = new Job(criteria, indexJob);
+		if(indexJob) {
+			
+		}
+		else {
+			
+		}
+		
+		return MyJob.getId();
+	}
+	
 
 }
