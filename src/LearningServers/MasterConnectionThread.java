@@ -15,11 +15,16 @@ public class MasterConnectionThread extends Thread {
 	private Queue<Object> outbox;
 	private Queue<Object> inbox;
 	private int workerBufferSize = 15;
-
+	private String connectedName;
+	private String connectedHost;
+	private int connectedPort;
+	
 	public MasterConnectionThread(Socket clientSocket) {
 		this.socket = clientSocket;
 		this.outbox = new ConcurrentLinkedQueue<Object>();
 		this.inbox = new ConcurrentLinkedQueue<Object>();
+		this.connectedHost = Helper.getConnectedHostName(clientSocket);
+		this.connectedPort = Helper.getConnectedPort(clientSocket);
 	}
 
 	public boolean placeInOutbox(Object toSend) {
@@ -41,19 +46,23 @@ public class MasterConnectionThread extends Thread {
 		}
 		return false;
 	}
+	
+	public String getConnectedHostName() {
+		return Helper.getConnectedHostName(this.socket);
+	}
 
 	public void run() {
 		// create the object streams to read on
 		InputStream inp = null;
 		ObjectInputStream in = null;
 		ObjectOutputStream out = null;
-		InputStreamThread ist = null;
+		MCTInputStreamThread ist = null;
 		try {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			inp = socket.getInputStream();
 			in = new ObjectInputStream(inp);
-			ist = new InputStreamThread(in, this);
+			ist = new MCTInputStreamThread(in, this);
 			ist.start();
 		} catch (IOException e) {
 			return;
@@ -79,6 +88,7 @@ public class MasterConnectionThread extends Thread {
 				}
 
 			} catch (IOException e) {
+				Master.removeConnection(this, this.connectedName);
 				e.printStackTrace();
 				return;
 			}
@@ -97,7 +107,8 @@ public class MasterConnectionThread extends Thread {
 				this.socket.close();
 				return;
 			}
-			if (line.equalsIgnoreCase("worker") || line.equalsIgnoreCase("client")) {
+			if (line.startsWith("w-") || line.equalsIgnoreCase("client")) {
+				this.connectedName = line;
 				Master.addConnection(this, line);
 
 			}
@@ -111,6 +122,7 @@ public class MasterConnectionThread extends Thread {
 	private void giveWorkToMaster(Object obj) {
 		Work wobj = ((Work) obj);
 		String otherID = wobj.getId();
+		//this is done so I know who to respond to once this work is done.
 		wobj.setMct(this);
 
 		if (!this.WorkIDBuffer.contains(otherID)) {
@@ -124,12 +136,12 @@ public class MasterConnectionThread extends Thread {
 	}
 }
 
-class InputStreamThread extends Thread {
+class MCTInputStreamThread extends Thread {
 
 	private ObjectInputStream ois = null;
 	private MasterConnectionThread hostThread = null;
 
-	public InputStreamThread(ObjectInputStream val, MasterConnectionThread host) {
+	public MCTInputStreamThread(ObjectInputStream val, MasterConnectionThread host) {
 		ois = val;
 		hostThread = host;
 	}

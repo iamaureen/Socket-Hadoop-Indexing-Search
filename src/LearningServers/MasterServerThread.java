@@ -9,16 +9,25 @@ public class MasterServerThread extends Thread {
 	public MasterServerThread() {
 	}
 
+	public void printstmt() {
+		System.out.println("Started Master Server");
+	}
+	
+	private void handleConn(Socket sock) {
+		// new thread for a client and worker input and output.
+		new MasterConnectionThread(sock).start();
+	}
+	
 	public void run() {
 		ServerSocket serverSock = null;
 		Socket sock = null;
 
 		try {
-			serverSock = new ServerSocket(Master.PORT);
+			serverSock = new ServerSocket(Helper.MASTERPORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("started server");
+		this.printstmt();
 		while (true) {
 
 			try {
@@ -28,8 +37,7 @@ public class MasterServerThread extends Thread {
 				e.printStackTrace();
 			}
 
-			// new thread for a client and worker input and output.
-			new MasterConnectionThread(sock).start();
+			handleConn(sock);
 		}
 	}
 }
