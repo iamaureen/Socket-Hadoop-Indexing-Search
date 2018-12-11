@@ -103,7 +103,7 @@ public class WorkerBase {
 						}
 
 						// and we are done with indexing let's respond with a job well done.
-						JobAck ja = ActiveJob.generateJobAck("SUCCESS: Completed");
+						JobAck ja = ActiveJob.generateJobAck("SUCCESS: Completed", workerName);
 						boolean success = false;
 						do {
 							// keep trying to place into outbox until it succeeds
@@ -162,7 +162,7 @@ public class WorkerBase {
 							// and we are done with indexing let's respond with a job well done.
 							JobAck ja = ActiveJob.generateJobAck(
 									"FAIL: We searched through " + IIInterface.getFileList('a', 'z').size()
-											+ " documents and did not find tour search terms");
+											+ " documents and did not find tour search terms", workerName);
 							boolean success = false;
 							do {
 								// keep trying to place into outbox until it succeeds
@@ -175,7 +175,7 @@ public class WorkerBase {
 						String response = rankAndRetrieve(terms);
 
 						// send back the response
-						JobAck ja = ActiveJob.generateJobAck("SUCCESS: " + response);
+						JobAck ja = ActiveJob.generateJobAck("SUCCESS: " + response, workerName);
 						boolean success = false;
 						do {
 							// keep trying to place into outbox until it succeeds

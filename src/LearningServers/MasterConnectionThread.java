@@ -18,7 +18,7 @@ public class MasterConnectionThread extends Thread {
 	private String connectedName;
 	private String connectedHost;
 	private int connectedPort;
-	
+
 	public MasterConnectionThread(Socket clientSocket) {
 		this.socket = clientSocket;
 		this.outbox = new ConcurrentLinkedQueue<Object>();
@@ -46,7 +46,11 @@ public class MasterConnectionThread extends Thread {
 		}
 		return false;
 	}
-	
+
+	public String getConnectedName() {
+		return this.connectedName;
+	}
+
 	public String getConnectedHostName() {
 		return Helper.getConnectedHostName(this.socket);
 	}
@@ -96,7 +100,7 @@ public class MasterConnectionThread extends Thread {
 		}
 	}
 
-	//TODO might need to change this method if we change our inputs
+	// TODO might need to change this method if we change our inputs
 	private void handleInput(Object obj) throws IOException {
 		String line = "";
 		if (obj.getClass() == String.class) {
@@ -117,16 +121,33 @@ public class MasterConnectionThread extends Thread {
 		}
 
 	}
-	
-	//TODO might need to change this method if we change our inputs
+
+	// TODO might need to change this method if we change our inputs
 	private void giveWorkToMaster(Object obj) {
 		Work wobj = ((Work) obj);
 		String otherID = wobj.getId();
-		//this is done so I know who to respond to once this work is done.
+		// this is done so I know who to respond to once this work is done.
 		wobj.setMct(this);
 
 		if (!this.WorkIDBuffer.contains(otherID)) {
-			Master.WorkQueue.add(obj);
+			boolean success = false;
+
+			// check if this object is a JobAck or not
+			if (obj.getClass() == JobAck.class) {
+				JobAck jobj = (JobAck) obj;
+				// send directly to the appropriate JobCoordinator thread
+				JobCoordinator jct = Master.jobMap.get(jobj.getId());
+				do {
+					success = jct.placeInInbox(jobj);
+				} while (!success);
+
+			} else {
+
+				do {
+					success = Master.WorkQueue.add(obj);
+				} while (!success);
+			}
+			// save id for later
 			this.WorkIDBuffer.add(otherID);
 			if (this.WorkIDBuffer.size() > this.workerBufferSize) {
 				this.WorkIDBuffer.remove(0);

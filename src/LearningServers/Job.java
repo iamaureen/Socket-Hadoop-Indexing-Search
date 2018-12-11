@@ -18,7 +18,7 @@ public class Job extends Work implements Serializable {
 	private String[] workerArray;
 	// an array of all the worker names
 	private String[] mapTasks;
-	// each entry in map tasks is the {worker name,start bit index, end bit index} Delimiter is |
+	// each entry in map tasks is the {worker name,start line, end line} Delimiter is |
 	private String[] reduceTasks;
 	// each entry in reduce tasks is {worker name, start letter, end letter}
 
@@ -37,13 +37,7 @@ public class Job extends Work implements Serializable {
 		this.targetValue = targetValue;
 	}
 
-	public String[] getWorkerArray() {
-		return workerArray;
-	}
-
-	public void setWorkerArray(String[] workerArray) {
-		this.workerArray = workerArray;
-	}
+	
 
 	public String[] getMapTasks() {
 		return mapTasks;
@@ -77,8 +71,16 @@ public class Job extends Work implements Serializable {
 		this.isIndexJob = isIndexJob;
 	}
 
-	public JobAck generateJobAck(String status) {
-		return new JobAck(this.getId(), status);
+	public JobAck generateJobAck(String status, String workerName) {
+		return new JobAck(this.getId(), status, workerName);
+	}
+
+	public String[] getWorkerArray() {
+		return workerArray;
+	}
+
+	public void setWorkerArray(String[] workerArray) {
+		this.workerArray = workerArray;
 	}
 
 }
