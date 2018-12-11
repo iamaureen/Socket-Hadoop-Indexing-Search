@@ -29,7 +29,7 @@ public class RandomAccessInputFile {
 		 byte[] readData = new byte[(int) raf.length()];
 		
 		 int length = endPosition - position;
-		 System.out.println(length + " "+ raf.length());
+		 //System.out.println(length + " "+ raf.length());
 		 raf.seek(position);
 		 
 		 //System.out.println("i am here, where are you? here???"+ raf.read(readData, position, length));
@@ -58,15 +58,15 @@ public class RandomAccessInputFile {
             
             //System.out.println(sendToWorker(1, filename, 0, 341));
             //System.out.println("something");
-            //System.out.println(sendToWorker(1, filename, 341, 677));
+            System.out.println(sendToWorker(1, filename, 341, 677));
             
            //worker will tokenize the content
-            wordTokenizer.processContent(sendToWorker(1, filename, 341, 677));
+            //wordTokenizer.processContent(sendToWorker(1, filename, 109, 223));
             
             
             
 ////            
-//            // create a new RandomAccessFile with filename test
+            // create a new RandomAccessFile with filename test
 //            RandomAccessFile raf = new RandomAccessFile(filePath, "rw");
 //            String line;
 //            
@@ -80,31 +80,12 @@ public class RandomAccessInputFile {
 //            		raf.seek(raf.getFilePointer());
 //            		System.out.println(raf.readLine());
 //            		
-//            		i++;
-//            		if(i==3) {
-//            			System.out.println("byebye"+raf.getFilePointer());
-//            			break;
-//            		}
-//            	
+//            		
 //            }
 //       
            
         
 
-            // set the file pointer at 0 position
-//            raf.seek(0);
-//            
-//            System.out.println("" + raf.getFilePointer());
-//            String line = raf.readLine();
-//            // print the line
-//            System.out.println("" + raf.getFilePointer());
-//            System.out.println("" + line);
-//
-//            System.out.println("" + line.getBytes().length);
-//            // set the file pointer at 0 position
-//            raf.seek(line.getBytes().length+1);
-//            // print the line
-//            System.out.println("" + raf.readLine());
 //            
             
             
