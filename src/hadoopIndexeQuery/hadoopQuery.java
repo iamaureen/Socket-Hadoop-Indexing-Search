@@ -32,7 +32,7 @@ public class hadoopQuery {
             //System.out.println("from mapper here is the string ::" + query);
 
             if(wordandfile[0].equals(query)){
-                    output.collect(new Text(wordandfile[0]), new IntWritable(Integer.parseInt(lineInputSplit[1])));
+                    output.collect(new Text(lineInputSplit[0]), new IntWritable(Integer.parseInt(lineInputSplit[1])));
             }
             //output.collect(new Text(wordandfile[0]), one);
             //output.collect(new Text(query), one);
