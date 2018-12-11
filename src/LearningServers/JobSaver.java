@@ -1,12 +1,17 @@
 package LearningServers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import tinyGoogle.WordCount;
 import tinyGoogle.utility;
@@ -83,6 +88,61 @@ public class JobSaver {
 			e.printStackTrace();
 		}
 
+		return null;
+	}
+
+	public static void saveSearchList(String id, ArrayList<String> termsToSave, String workerName) {
+		String path = utility.getJobDir() + "/" + id;
+		new File(path).mkdir();
+
+		try {
+			FileWriter fos = new FileWriter(new File(path + "/" + workerName + ".txt"));
+			fos.write("\n\n");
+			for (String line : termsToSave) {
+				fos.write(line + "\n");
+			}
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public static int countSearchList(String id) {
+
+		String path = utility.getJobDir() + "/" + id;
+		File thisJobDir = new File(path);
+
+		return thisJobDir.list().length;
+	}
+
+	public static ArrayList<String> collectSearchList(String id) {
+		String path = utility.getJobDir() + "/" + id;
+		File thisJobDir = new File(path);
+		ArrayList<String> retval = new ArrayList<String>();
+		try {
+			for (String p : thisJobDir.list()) {
+				FileReader fis = new FileReader(new File(path + "/" + p));
+				BufferedReader br = new BufferedReader(fis);
+				String sCurrentLine = "";
+
+				while ((sCurrentLine = br.readLine()) != null) {
+					sCurrentLine = sCurrentLine.trim();
+					if (sCurrentLine.length() > 0) {
+						retval.add(sCurrentLine);
+					}
+				}
+			}
+			
+			return retval;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 

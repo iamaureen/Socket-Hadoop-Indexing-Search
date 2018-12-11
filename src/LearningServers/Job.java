@@ -77,4 +77,8 @@ public class Job extends Work implements Serializable {
 		this.isIndexJob = isIndexJob;
 	}
 
+	public JobAck generateJobAck(String status) {
+		return new JobAck(this.getId(), status);
+	}
+
 }

@@ -8,15 +8,15 @@ public class DocumentIndexer {
 	private ArrayList<DocumentIndex> DocIdList = new ArrayList<DocumentIndex>();
 	int maxID;
 
-	DocumentIndexer() {
+	public DocumentIndexer() {
 		parseFile();
 	}
-	
+
 	public void updateStruct() {
 		parseFile();
 	}
-	
-	void parseFile() {
+
+	public void parseFile() {
 		String filePath = getFilePath();
 
 		BufferedReader br = null;
@@ -75,16 +75,16 @@ public class DocumentIndexer {
 		}
 	}
 
-	public boolean isDocumentPresentByID(int id) {
+	public String isDocumentPresentByID(int id) {
 
 		for (int i = 0; i < DocIdList.size(); i++) {
 			System.out.println(DocIdList.get(i).getDocId());
 			if (DocIdList.get(i).getDocId() == id) {
-				return true; // return DocIdList.get(i).getDocPath();
+				return DocIdList.get(i).getDocPath();
 			}
 		}
 
-		return false; // file id is not in the list
+		return null; // file id is not in the list
 
 	}
 
@@ -92,8 +92,8 @@ public class DocumentIndexer {
 
 		int docID = 0;
 		for (int i = 0; i < DocIdList.size(); i++) {
-			System.out.println(DocIdList.get(i).getDocPath());
-			if (DocIdList.get(i).getDocPath().trim().equals(path)) {
+			//System.out.println(DocIdList.get(i).getDocPath());
+			if (DocIdList.get(i).getDocPath().contains(path)) {
 				return DocIdList.get(i).getDocId();
 			}
 		}
@@ -106,17 +106,13 @@ public class DocumentIndexer {
 		// append into the file with id and path
 		appendStrToFile(getFilePath(), toWriteInTheFile);
 
-		
-		
 		return docID;
 
 		// file id is not in the list
 
 	}
 
-	public void addFiletoDocumentIndex(String path) {
 
-	}
 
 	public static void appendStrToFile(String fileName, String str) {
 		try {
@@ -130,13 +126,8 @@ public class DocumentIndexer {
 	}
 
 	public String getFilePath() {
-		String workingDirectoty = System.getProperty("user.dir");
-		String fileName = "documentList.txt";
-		String filePath = workingDirectoty + "/src/tinyGoogle/" + fileName;
 
-		System.out.println("Working Directory = " + filePath);
-
-		return filePath;
+		return "./documentList.txt";
 	}
 
 	public static void main(String[] args) {

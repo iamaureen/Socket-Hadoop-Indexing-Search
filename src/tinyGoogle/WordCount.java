@@ -1,6 +1,9 @@
 package tinyGoogle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WordCount implements java.io.Serializable {
 	
@@ -15,6 +18,12 @@ public class WordCount implements java.io.Serializable {
 		}	
 	}
 	
+	public void incrementandAddbycount(String word, int count) {
+		if(wc.putIfAbsent(word, count) != null) {
+			wc.put(word, wc.get(word)+count);
+		}
+	}
+	
 	public void merge(WordCount obj) {
 		//takes all other object and merges to this object
 		for (String s: obj.wc.keySet()) {
@@ -24,6 +33,7 @@ public class WordCount implements java.io.Serializable {
 			}
 		}
 	}
+	
 	
 	//add toString
 	public String convertToString() {
@@ -55,6 +65,17 @@ public class WordCount implements java.io.Serializable {
 		for (Map.Entry<String, Integer> entry : wc.entrySet()) {
 		    System.out.println(entry.getKey() + ":" + entry.getValue().toString());
 		}
+	}
+	
+	public List<WCPair> toList(){
+		List<WCPair> retval = new ArrayList<WCPair>();
+		
+		for(String s: this.wc.keySet()) {
+			WCPair temp = new WCPair(s, this.wc.get(s));
+			retval.add(temp);
+		}
+		
+		return retval;
 	}
 	
 }

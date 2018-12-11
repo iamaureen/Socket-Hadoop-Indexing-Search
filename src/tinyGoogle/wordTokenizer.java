@@ -56,7 +56,8 @@ public class wordTokenizer {
 
 		// replace punctuation
 		// https://www.geeksforgeeks.org/removing-punctuations-given-string/
-		content = content.replaceAll("\\p{Punct}", "").replaceAll("\\n", " ").replaceAll("\\s+", " ").toLowerCase();
+		// removing digits and punctuation from string
+		content = content.replaceAll("\\p{Punct}", " ").replaceAll("\\d", " ").replaceAll("\\n", " ").replaceAll("\\s+", " ").toLowerCase();
 
 		// get the stop words
 		Set<String> stopwords = getStopWords();

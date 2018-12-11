@@ -68,6 +68,9 @@ public class IIInterface {
 		
 	}
 
+	public static String getTerm(String fileName) {
+		return fileName.substring(0, fileName.indexOf("-"));
+	}
 	public static String getPath(String fileName) {
 		String retval = "nothing";
 		
