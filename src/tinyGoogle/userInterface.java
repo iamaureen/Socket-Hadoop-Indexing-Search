@@ -14,10 +14,10 @@ import javax.swing.filechooser.FileSystemView;
 
 public class userInterface extends Frame implements ActionListener {
 	
-	   static Label lblInput;     // Declare input Label
-	   static Label lblOutput;    // Declare output Label
-	   static TextField tfInput;  // Declare input TextField
-	   static TextField tfOutput; // Declare output TextField
+	   static Label optionInput;     // Declare input Label
+	   static Label secondInput;    // Declare output Label
+	   static TextField optionInputTextField;  // Declare input TextField
+	   static TextField secondInputTextField; // Declare output TextField
 	  
 	   static javax.swing.JButton jButton_fileChoose;
 	   static javax.swing.JLabel jLabel_Image;
@@ -30,81 +30,81 @@ public class userInterface extends Frame implements ActionListener {
 	   public userInterface() {
 		   
 		// Create and set up a frame window
-					JFrame.setDefaultLookAndFeelDecorated(true);
-					JFrame frame = new JFrame("BoxLayout Example X_AXIS");
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					
-					// Set the panel to add buttons
-					JPanel panel = new JPanel();
-					
-					// Set the BoxLayout to be X_AXIS: from left to right
-					BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
-					
-					// Set the Boxayout to be Y_AXIS from top to down
-					//BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JFrame frame = new JFrame("Tiny Google Interface");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		// Set the panel to add buttons
+		JPanel panel = new JPanel();
+		
+		// Set the BoxLayout to be X_AXIS: from left to right
+		BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
+		
+		// Set the Boxayout to be Y_AXIS from top to down
+		//BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
 
-					panel.setLayout(boxlayout);
-					
-					// Set border for the panel
-					panel.setBorder(new EmptyBorder(new Insets(150, 200, 150, 200)));	
-					
-					lblInput = new Label("Option (Index/Query): ");
-					panel.add(lblInput);
-					
-					tfInput = new TextField(10); // Construct TextField
-				    panel.add(tfInput);  
-				    
-				    lblOutput = new Label("Document Path ");
-					panel.add(lblOutput);
-					
-					tfOutput = new TextField(40);
-					panel.add(tfOutput);
-					
-					jButton_fileChoose = new javax.swing.JButton();
-				    panel.add(jButton_fileChoose);
-				      
-				      //file chooser button -- choose text file
-				        jButton_fileChoose.setText("Choose File");
-				        jButton_fileChoose.addActionListener(new java.awt.event.ActionListener() {
-				            public void actionPerformed(java.awt.event.ActionEvent evt) {
-				            	jButtonFileChooseActionPerformed(evt);
-				            }
+		panel.setLayout(boxlayout);
+		
+		// Set border for the panel
+		panel.setBorder(new EmptyBorder(new Insets(150, 200, 150, 200)));	
+		
+		optionInput = new Label("Option (Index/Query): ");
+		panel.add(optionInput);
+		
+		optionInputTextField = new TextField(10); // Construct TextField
+	    panel.add(optionInputTextField);  
+	    
+	    secondInput = new Label("Option (Index/Query): ");
+		panel.add(secondInput);
+	    
+		secondInputTextField = new TextField(40);
+		panel.add(secondInputTextField);
+		
+		jButton_fileChoose = new javax.swing.JButton();
+	    panel.add(jButton_fileChoose);
+	      
+        //file chooser button -- choose text file
+        jButton_fileChoose.setText("Choose File");
+        jButton_fileChoose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	jButtonFileChooseActionPerformed(evt);
+            }
+
+			private void jButtonFileChooseActionPerformed(ActionEvent evt) {
+				// TODO Auto-generated method stub
+				
+			JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+		 
+			int result = fileChooser.showOpenDialog(null);
+		    	if (result == JFileChooser.APPROVE_OPTION) {
+		    	    File selectedFile = fileChooser.getSelectedFile();
+		    	    
+		    	    fullPathName=selectedFile.getAbsolutePath();
+		    	    pathname=selectedFile.getParent();
+		    	    filename=selectedFile.getName();
+		    	    
+		    	    System.out.println("Selected file: " + selectedFile.getAbsolutePath()+ "\nfile name: " + selectedFile.getName());
+		    	    secondInputTextField.setText(selectedFile.getAbsolutePath());
+		    	}
+				
+			}
+        });
+	        
+			// Define new buttons
+			JButton sendToClientButton = new JButton("Send To Client");
+
+			// Add buttons to the frame (and spaces between buttons)
+			panel.add(sendToClientButton);
 			
-							private void jButtonFileChooseActionPerformed(ActionEvent evt) {
-								// TODO Auto-generated method stub
-								
-							JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
-						 
-							int result = fileChooser.showOpenDialog(null);
-						    	if (result == JFileChooser.APPROVE_OPTION) {
-						    	    File selectedFile = fileChooser.getSelectedFile();
-						    	    
-						    	    fullPathName=selectedFile.getAbsolutePath();
-						    	    pathname=selectedFile.getParent();
-						    	    filename=selectedFile.getName();
-						    	    
-						    	    System.out.println("Selected file: " + selectedFile.getAbsolutePath()+ "\nfile name: " + selectedFile.getName());
-						    	    tfOutput.setText(selectedFile.getAbsolutePath());
-						    	}
-								
-							}
-				        });
-				        
-						// Define new buttons
-						JButton jb1 = new JButton("Send To Client");
-
-						// Add buttons to the frame (and spaces between buttons)
-						panel.add(jb1);
-						
-						jb1.addActionListener(this);
-					
-					// Set size for the frame
-					//frame.setSize(300, 300);
-					
-					// Set the window to be visible as the default to be false
-					frame.add(panel);
-					frame.pack();
-					frame.setVisible(true);
+			sendToClientButton.addActionListener(this);
+		
+			// Set size for the frame
+			//frame.setSize(300, 300);
+			
+			// Set the window to be visible as the default to be false
+			frame.add(panel);
+			frame.pack();
+			frame.setVisible(true);
 
 	   }
 	   
@@ -119,7 +119,10 @@ public class userInterface extends Frame implements ActionListener {
 	   // ActionEvent handler - Called back upon hitting "enter" key on TextField
 	   @Override
 	   public void actionPerformed(ActionEvent evt) {
-	      System.out.println("send to client");
+		   System.out.println(optionInputTextField.getText());
+		   System.out.println(secondInputTextField.getText());
+		   
+		   
 	   }
 
 }
