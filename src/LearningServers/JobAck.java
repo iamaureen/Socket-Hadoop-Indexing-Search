@@ -1,15 +1,19 @@
 package LearningServers;
 
-public class JobAck extends Work{
+import java.util.UUID;
+
+public class JobAck extends Work {
 	private String id;
+	private String jobId;
 	private String status;
 	private String workerName;
-	
+
 	public JobAck(String i, String s, String workerName) {
-		setId(i);
+		this.id = UUID.randomUUID().toString();
+		setJobId(i);
 		setStatus(s);
 		setWorkerName(workerName);
-		
+
 	}
 
 	public String getStatus() {
@@ -24,8 +28,12 @@ public class JobAck extends Work{
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public String getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(String id) {
+		this.jobId = id;
 	}
 
 	public String getWorkerName() {

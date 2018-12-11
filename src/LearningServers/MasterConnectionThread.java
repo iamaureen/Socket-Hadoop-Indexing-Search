@@ -135,10 +135,15 @@ public class MasterConnectionThread extends Thread {
 			// check if this object is a JobAck or not
 			if (obj.getClass() == JobAck.class) {
 				JobAck jobj = (JobAck) obj;
+
 				// send directly to the appropriate JobCoordinator thread
-				JobCoordinator jct = Master.jobMap.get(jobj.getId());
+				JobCoordinator jct = Master.jobMap.get(jobj.getJobId());
 				do {
-					success = jct.placeInInbox(jobj);
+					if (jobj.getStatus().equalsIgnoreCase("job received")) {
+						success = jct.placeInInitInbox(jobj);
+					} else {
+						success = jct.placeInInbox(jobj);
+					}
 				} while (!success);
 
 			} else {
@@ -147,7 +152,7 @@ public class MasterConnectionThread extends Thread {
 					success = Master.WorkQueue.add(obj);
 				} while (!success);
 			}
-			// save id for later
+			// save id for later incase there is double messages
 			this.WorkIDBuffer.add(otherID);
 			if (this.WorkIDBuffer.size() > this.workerBufferSize) {
 				this.WorkIDBuffer.remove(0);

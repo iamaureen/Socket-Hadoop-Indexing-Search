@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.sun.javafx.collections.MappingChange.Map;
-
 import tinyGoogle.FileHandler;
 
 public class JobCoordinator extends Thread {
@@ -28,6 +26,16 @@ public class JobCoordinator extends Thread {
 	public boolean placeInInbox(Object toReceive) {
 		try {
 			return this.inbox.add(toReceive);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean placeInInitInbox(Object toReceive) {
+		try {
+			return this.initInbox.add(toReceive);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -172,8 +180,12 @@ public class JobCoordinator extends Thread {
 		}
 		return sum/total;
 	}
+	
+	
 	// wait for work to complete
 	public void run() {
+		
+		
 	}
 
 }
