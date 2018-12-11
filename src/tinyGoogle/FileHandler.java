@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileHandler {
@@ -20,30 +18,30 @@ public class FileHandler {
 		String[] stringArray = data.split("\n");
 
 		// System.out.println("Number of lines in the file are :: "+stringArray.length);
-
+fis.close();
 		return stringArray.length;
 	}
 
-	public static int[] lineStartIndexes(String filePath) throws IOException {
-
-		RandomAccessFile raf = new RandomAccessFile(filePath, "r");
-
-		long position = raf.getFilePointer();
-		ArrayList<Long> linepositions = new ArrayList<Long>();
-		while (position < raf.length()) {
-			position = raf.getFilePointer();
-			linepositions.add(position);
-
-			raf.readLine();
-		}
-
-		int[] retval = new int[linepositions.size()];
-		for (int i = 0; i < retval.length; i++) {
-			retval[i] = (int) (long) linepositions.get(i);
-		}
-
-		return retval;
-	}
+//	public static int[] lineStartIndexes(String filePath) throws IOException {
+//
+//		RandomAccessFile raf = new RandomAccessFile(filePath, "r");
+//
+//		long position = raf.getFilePointer();
+//		ArrayList<Long> linepositions = new ArrayList<Long>();
+//		while (position < raf.length()) {
+//			position = raf.getFilePointer();
+//			linepositions.add(position);
+//
+//			raf.readLine();
+//		}
+//
+//		int[] retval = new int[linepositions.size()];
+//		for (int i = 0; i < retval.length; i++) {
+//			retval[i] = (int) (long) linepositions.get(i);
+//		}
+//
+//		return retval;
+//	}
 
 	/*
 	 * public static String sendToWorker(String filename, int startPosition, int
@@ -92,10 +90,11 @@ public class FileHandler {
 		return retval;
 
 	}
-
+/*
 	public static void main(String[] args) {
 		String filePath = "sampleinput.txt";
 		try {
+			@SuppressWarnings("unused")
 			File file = new File(filePath);
 
 			// file length in bytes
@@ -159,5 +158,6 @@ public class FileHandler {
 			e.printStackTrace();
 		}
 	}
+	*/
 
 }

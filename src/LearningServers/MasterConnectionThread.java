@@ -149,7 +149,7 @@ public class MasterConnectionThread extends Thread {
 			} else {
 
 				do {
-					success = Master.WorkQueue.add(obj);
+					success = Master.WorkQueue.add((Request)obj);
 				} while (!success);
 			}
 			// save id for later incase there is double messages

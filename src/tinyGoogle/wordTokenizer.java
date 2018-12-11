@@ -1,7 +1,6 @@
 package tinyGoogle;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -85,9 +84,9 @@ public class wordTokenizer {
 		return wcObj;
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
+	/*public static void main(String[] args) throws FileNotFoundException {
 		String content = readFile();
 		processContent(content);
-	}
+	}*/
 
 }

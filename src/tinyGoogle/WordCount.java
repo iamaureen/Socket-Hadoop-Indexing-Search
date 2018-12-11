@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class WordCount implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Map<String, Integer> wc = new HashMap<String, Integer>();
 
 	public void incrementandAdd(String word){

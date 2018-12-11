@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class DocumentIndexer {
 
 	private ArrayList<DocumentIndex> DocIdList = new ArrayList<DocumentIndex>();
-	int maxID;
+	private int maxID;
 
 	public DocumentIndexer() {
 		parseFile();
@@ -75,6 +75,10 @@ public class DocumentIndexer {
 		}
 	}
 
+	public int getMax() {
+		return maxID;
+	}
+
 	public String isDocumentPresentByID(int id) {
 
 		for (int i = 0; i < DocIdList.size(); i++) {
@@ -92,7 +96,7 @@ public class DocumentIndexer {
 
 		int docID = 0;
 		for (int i = 0; i < DocIdList.size(); i++) {
-			//System.out.println(DocIdList.get(i).getDocPath());
+			// System.out.println(DocIdList.get(i).getDocPath());
 			if (DocIdList.get(i).getDocPath().contains(path)) {
 				return DocIdList.get(i).getDocId();
 			}
@@ -112,8 +116,6 @@ public class DocumentIndexer {
 
 	}
 
-
-
 	public static void appendStrToFile(String fileName, String str) {
 		try {
 			// Open given file in append mode.
@@ -129,15 +131,15 @@ public class DocumentIndexer {
 
 		return "./documentList.txt";
 	}
-
-	public static void main(String[] args) {
-		// when DocumentIndexer is called it parses through the document and makes a
-		// list of existing documents
-		DocumentIndexer d = new DocumentIndexer();
-
-		System.out.print(d.isDocumentPresentByPath("arrypotter"));
-
-	}
+	/*
+	 * public static void main(String[] args) { // when DocumentIndexer is called it
+	 * parses through the document and makes a // list of existing documents
+	 * DocumentIndexer d = new DocumentIndexer();
+	 * 
+	 * System.out.print(d.isDocumentPresentByPath("arrypotter"));
+	 * 
+	 * }
+	 */
 
 }
 
