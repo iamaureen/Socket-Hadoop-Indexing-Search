@@ -32,5 +32,16 @@ public class utility {
 	public static String getBasePath() {
 		return basePath ;
 	}
+
+	public static boolean deleteDirectory(File directoryToBeDeleted) {
+		// src: https://www.baeldung.com/java-delete-directory
+		File[] allContents = directoryToBeDeleted.listFiles();
+		if (allContents != null) {
+			for (File file : allContents) {
+				deleteDirectory(file);
+			}
+		}
+		return directoryToBeDeleted.delete();
+	}
 	
 }

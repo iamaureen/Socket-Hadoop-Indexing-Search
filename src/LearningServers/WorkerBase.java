@@ -29,8 +29,9 @@ public class WorkerBase {
 		WorkerToMasterThread commThread = new WorkerToMasterThread();
 		commThread.start();
 
-		//instantiate the II structure.
+		//instantiate the II structure. and job directory
 		IIInterface.setupStructure(utility.getBasePath());
+		utility.setJobDir(".");
 		
 		// we will now enter the work loop
 
@@ -47,6 +48,7 @@ public class WorkerBase {
 				}
 				// indexing request
 				if (ActiveJob.isIndexJob()) {
+
 					// handle mapping task
 					String mapTask = getTask(ActiveJob.getMapTasks());
 					if (mapTask != null) {

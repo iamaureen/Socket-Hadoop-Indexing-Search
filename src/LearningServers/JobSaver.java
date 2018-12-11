@@ -20,7 +20,6 @@ public class JobSaver {
 
 	public static void saveWC(String id, String start, String end, String workerName, WordCount toSave) {
 		String path = utility.getJobDir() + "/" + id;
-		new File(path).mkdir();
 
 		try {
 			FileOutputStream fos = new FileOutputStream(
@@ -93,7 +92,6 @@ public class JobSaver {
 
 	public static void saveSearchList(String id, ArrayList<String> termsToSave, String workerName) {
 		String path = utility.getJobDir() + "/" + id;
-		new File(path).mkdir();
 
 		try {
 			FileWriter fos = new FileWriter(new File(path + "/" + workerName + ".txt"));

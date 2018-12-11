@@ -34,7 +34,7 @@ public class IIInterface {
 			return;
 		}
 
-		deleteDirectory(new File(basePath + "/InvertedIndex"));
+		utility.deleteDirectory(new File(basePath + "/InvertedIndex"));
 
 	}
 
@@ -88,17 +88,6 @@ public class IIInterface {
 	}
 	private static String getDir(int i) {
 		return basePath + "/InvertedIndex/" + dirs.charAt(i) + "/";
-	}
-
-	private static boolean deleteDirectory(File directoryToBeDeleted) {
-		// src: https://www.baeldung.com/java-delete-directory
-		File[] allContents = directoryToBeDeleted.listFiles();
-		if (allContents != null) {
-			for (File file : allContents) {
-				deleteDirectory(file);
-			}
-		}
-		return directoryToBeDeleted.delete();
 	}
 
 	public static void main(String[] args) {

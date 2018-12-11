@@ -13,7 +13,7 @@ public class WorkerToMasterThread extends Thread {
 	protected Socket socket;
 
 	private ArrayList<String> JobIDBuffer = new ArrayList<String>();
-	//this outbox should only have job acks
+	// this outbox should only have job acks
 	private Queue<Object> outbox;
 	private Queue<Object> inbox;
 	private int jobBufferSize = 5;
@@ -30,7 +30,7 @@ public class WorkerToMasterThread extends Thread {
 			e.printStackTrace();
 			return;
 		}
-		
+
 	}
 
 	public void run() {
@@ -81,12 +81,18 @@ public class WorkerToMasterThread extends Thread {
 	}
 
 	private void handleInput(Object obj) {
-		//this worker to master thread will only get jobs from master
-		Job j = (Job)obj;
-		
+		// this worker to master thread will only get jobs from master
+		Job j = (Job) obj;
+
 		String otherID = j.getId();
 		if (!this.JobIDBuffer.contains(otherID)) {
-			WorkerBase.JobQueue.add(obj);
+			boolean success = false;
+			do {
+				success = WorkerBase.JobQueue.add(obj);
+			} while (!success);
+			
+			this.placeInOutbox(j.generateJobAck("job received", WorkerBase.workerName));
+			
 			this.JobIDBuffer.add(otherID);
 			if (this.JobIDBuffer.size() > this.jobBufferSize) {
 				this.JobIDBuffer.remove(0);

@@ -1,5 +1,6 @@
 package LearningServers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import tinyGoogle.FileHandler;
+import tinyGoogle.utility;
 
 public class JobCoordinator extends Thread {
 
@@ -17,12 +19,14 @@ public class JobCoordinator extends Thread {
 	private Job MyJob = null;
 	private Queue<Object> inbox;
 	private Queue<Object> initInbox;
+	private MasterConnectionThread RespondTo;
+
 	public JobCoordinator() {
 		this.inbox = new ConcurrentLinkedQueue<Object>();
 		this.initInbox = new ConcurrentLinkedQueue<Object>();
-		
 
 	}
+
 	public boolean placeInInbox(Object toReceive) {
 		try {
 			return this.inbox.add(toReceive);
@@ -32,7 +36,7 @@ public class JobCoordinator extends Thread {
 		}
 		return false;
 	}
-	
+
 	public boolean placeInInitInbox(Object toReceive) {
 		try {
 			return this.initInbox.add(toReceive);
@@ -42,8 +46,10 @@ public class JobCoordinator extends Thread {
 		}
 		return false;
 	}
-	public String initJob(boolean indexJob, String criteria) throws IOException {
+
+	public String initJob(boolean indexJob, String criteria, MasterConnectionThread Response) throws IOException {
 		MyJob = new Job(criteria, indexJob);
+		this.RespondTo = Response;
 		ArrayList<Integer> workerIndex = genNumbers(Master.WorkerList.size());
 		String[] charSplits = genCharSplits(workerIndex.size());
 		HashSet<String> JobWorkers = new HashSet<String>();
@@ -54,11 +60,12 @@ public class JobCoordinator extends Thread {
 			int numReducers = charSplits.length;
 
 			// gen Map tasks
+			//shuffle the workers to avoid giving all of the work to the same workers
 			Collections.shuffle(workerIndex);
 			String[] mapTasks = new String[numWorkers];
 			int linesPerWorker = numLines / numWorkers;
 			for (int i = 0; i < numWorkers; i++) {
-				
+
 				String workerName = Master.WorkerList.get(workerIndex.get(i)).getConnectedName();
 				String temp = workerName + "|" + i * linesPerWorker + "|" + (i * linesPerWorker + linesPerWorker - 1);
 				mapTasks[i] = temp;
@@ -96,20 +103,23 @@ public class JobCoordinator extends Thread {
 				mapTasks[i] = temp;
 				JobWorkers.add(workerName);
 			}
-			
+
 			MyJob.setMapTasks(mapTasks);
-			
+
 			String[] reduceTasks = new String[numReducers];
-			reduceTasks[0] = Master.WorkerList.get(workerIndex.get(0)).getConnectedName() + "|" + "a"+ "|" + "z";
+			reduceTasks[0] = Master.WorkerList.get(workerIndex.get(0)).getConnectedName() + "|" + "a" + "|" + "z";
 			JobWorkers.add(Master.WorkerList.get(workerIndex.get(0)).getConnectedName());
 
 		}
-		
+
 		String[] workerArr = new String[JobWorkers.size()];
 		JobWorkers.toArray(workerArr);
-		
+
 		MyJob.setWorkerArray(workerArr);
-		
+
+		// create the working directory for the workers
+		utility.setJobDir(".");
+		new File(utility.getJobDir() + "/" + MyJob.getId()).mkdirs();
 
 		return MyJob.getId();
 	}
@@ -142,13 +152,14 @@ public class JobCoordinator extends Thread {
 		}
 		return retval;
 	}
-	
-	//this method is to make sure that there is not deadlock on workers getting work from other jobs before this one is started.
+
+	// this method is to make sure that there is not deadlock on workers getting
+	// work from other jobs before this one is started.
 
 	public void sendJobsAndWaitAck() {
-		//send job info to relevant workers
+		// send job info to relevant workers
 		HashMap<String, Integer> workersToWait = new HashMap<String, Integer>();
-		for (String worker: MyJob.getWorkerArray()) {
+		for (String worker : MyJob.getWorkerArray()) {
 			MasterConnectionThread mct = Master.getMCT(worker);
 			boolean success = false;
 			do {
@@ -157,11 +168,11 @@ public class JobCoordinator extends Thread {
 			} while (!success);
 			workersToWait.put(worker, 0);
 		}
-		
-		//wait on initInbox to receive all requests.
+
+		// wait on initInbox to receive all requests.
 		JobAck ja = null;
 		int done = getPercent(workersToWait);
-		while(done < 1) {
+		while (done < 1) {
 			ja = (JobAck) this.initInbox.poll();
 
 			if (ja != null) {
@@ -169,23 +180,76 @@ public class JobCoordinator extends Thread {
 			}
 			done = getPercent(workersToWait);
 		}
-		
+
 	}
 
 	private int getPercent(HashMap<String, Integer> workersToWait) {
-		int total =0,sum=0;
-		for(String key: workersToWait.keySet()) {
+		int total = 0, sum = 0;
+		for (String key : workersToWait.keySet()) {
 			total += 1;
 			sum += workersToWait.get(key);
 		}
-		return sum/total;
+		return sum / total;
 	}
-	
-	
+
 	// wait for work to complete
 	public void run() {
+
+		// this will poll the inbox for all JobAck's and respond to the requesting
+		// thread when appropriate
+		JobAck ja = null;
+
+		// this is the list of workers we are waiting for to get their parts done
+		HashMap<String, Integer> workersToWait = new HashMap<String, Integer>();
+		String[] content;
+		for (String task : MyJob.getReduceTasks()) {
+			content = task.split("|");
+
+			workersToWait.put(content[0], 0);
+		}
+		int done = getPercent(workersToWait);
+
+		String response = "";
+
+		while (done < 1) {
+
+			ja = (JobAck) inbox.poll();
+			if (ja != null) {
+				if (MyJob.isIndexJob()) {
+					// input check
+					if (ja.getStatus().startsWith("SUCCESS:") && ja.getStatus().contains("Complete")) {
+						workersToWait.put(ja.getWorkerName(), 1);
+					}
+				}
+
+				// since there is one reducer for all searches, then we just set the value here
+				else {
+					workersToWait.put(ja.getWorkerName(), 1);
+					response = ja.getStatus();
+
+				}
+			}
+
+			done = getPercent(workersToWait);
+
+		}
+
+		if (MyJob.isIndexJob()) {
+			response = "Indexing is done for " + MyJob.getTargetValue();
+		}
+		// send the response now that the work is done
+		boolean success = false;
+		do {
+			success = this.RespondTo.placeInOutbox(new RequestAck(response));
+		} while (!success);
 		
+		//remove the job from the master list
+		Master.jobMap.remove(MyJob.getId());
 		
+		//clean up the job files
+		utility.deleteDirectory(new File(utility.getJobDir() + "/" + MyJob.getId()));
+		
+		return;
 	}
 
 }
