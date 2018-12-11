@@ -11,12 +11,45 @@ import org.apache.hadoop.io.Text;
 
 public class hadoopIndexer {
 	
-	public static class IndexMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable>{
-		
-	}
+	public static class IndexMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable>
+	  {
+	    private final static IntWritable one = new IntWritable(1);
+	    private Text word = new Text();
+
+	    public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException
+	    {
+
+	    		//https://stackoverflow.com/questions/19012482/how-to-get-the-input-file-name-in-the-mapper-in-a-hadoop-program
+	        FileSplit fs = (FileSplit) reporter.getInputSplit();
+	        String filename = fs.getPath().getName();
+	        System.out.println(filename);
+
+	        String line = value.toString();
+	        StringTokenizer tokenizer = new StringTokenizer(line);
+	        StringBuilder appendFile = new StringBuilder();
+	        while (tokenizer.hasMoreTokens())
+	        {
+	            appendFile.append(tokenizer.nextToken());
+	            appendFile.append('@'+filename);
+	            word.set(appendFile.toString());
+	            output.collect(word, one);
+	            //clear appendFile for next time
+	            appendFile.setLength(0);
+	        }
+	    }
+	 }
+
 	
 	public static class IndexReducer extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable>{
-		
+		public void IndexReducer(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException
+        {
+                int sum = 0;
+                while (values.hasNext())
+                {
+                        sum += values.next().get();
+                }
+                output.collect(key, new IntWritable(sum));
+        }
 	}
 	
 	public static void main(String[] args) throws Exception{
