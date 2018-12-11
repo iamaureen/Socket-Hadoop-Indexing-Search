@@ -16,7 +16,7 @@ public class hadoopIndexer {
 	    private final static IntWritable one = new IntWritable(1);
 	    private Text word = new Text();
 
-	    public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException
+	    public void map(LongWritable key, javax.xml.soap.Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException
 	    {
 
 	    		//https://stackoverflow.com/questions/19012482/how-to-get-the-input-file-name-in-the-mapper-in-a-hadoop-program
@@ -24,7 +24,8 @@ public class hadoopIndexer {
 	        String filename = fs.getPath().getName();
 	        System.out.println(filename);
 
-	        String line = value.toString();
+	        	String valuewoPunc = value.toString().replaceAll("\\p{Punct}","");
+	        String line = valuewoPunc.toString();
 	        StringTokenizer tokenizer = new StringTokenizer(line);
 	        StringBuilder appendFile = new StringBuilder();
 	        while (tokenizer.hasMoreTokens())
