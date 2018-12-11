@@ -1,6 +1,10 @@
 package tinyGoogle;
 
+import java.io.File;
+
 public class utility {
+	private static String jobDir = null;
+	private static String docLoc = null;
 
 	//return the file path when a filename is given
 	public static String getFilePath(String filename) {
@@ -12,5 +16,27 @@ public class utility {
 		
 		return filePath;
 	}
-	
+
+	public static void setJobDir(String bp) {
+		jobDir = bp+"/Jobs";
+		new File(jobDir).mkdirs();
+	}
+	public static String getJobDir() {
+		if(jobDir == null) {
+			System.err.println("The Job Directory needs to be specified");
+			return null;
+		}
+		return jobDir;
+	}
+	public static void setDocIndexLoc(String bp) {
+		docLoc = bp+"/Jobs";
+	}
+	public static String getDocIndex() {
+		if(jobDir == null) {
+			System.err.println("The Job Directory needs to be specified");
+			return null;
+		}
+		return jobDir;
+	}
+		
 }

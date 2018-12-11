@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 public class Helper {
 	//This class contains some server helper methods to use. 
 	public static final int MASTERPORT = 12345;
-	public static final String MASTERHOST = "oxygen.cs.pitt.edu";
+	public static final String MASTERHOST = "127.0.0.1";//"oxygen.cs.pitt.edu";
 	
 	public static String getHostName() {
 		try {

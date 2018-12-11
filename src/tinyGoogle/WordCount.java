@@ -6,7 +6,7 @@ public class WordCount implements java.io.Serializable {
 	
 	Map<String, Integer> wc = new HashMap<String, Integer>();
 
-	void incrementandAdd(String word){
+	public void incrementandAdd(String word){
 		
 		if(wc.get(word) != null) {
 			wc.put(word, wc.get(word)+1);
@@ -15,7 +15,7 @@ public class WordCount implements java.io.Serializable {
 		}	
 	}
 	
-	void merge(WordCount obj) {
+	public void merge(WordCount obj) {
 		//takes all other object and merges to this object
 		for (String s: obj.wc.keySet()) {
 			//check if s is in this wc
@@ -30,7 +30,7 @@ public class WordCount implements java.io.Serializable {
 		return (this.wc).toString();
 	}
 	
-	WordCount extract(char startsWith, char endsWith) {
+	public WordCount extract(char startsWith, char endsWith) {
 		
 		Map<String, Integer> extracted_map = new HashMap<String, Integer>();
 		
@@ -51,7 +51,7 @@ public class WordCount implements java.io.Serializable {
 			
 	}
 	
-	void printWordCount() {
+	public void printWordCount() {
 		for (Map.Entry<String, Integer> entry : wc.entrySet()) {
 		    System.out.println(entry.getKey() + ":" + entry.getValue().toString());
 		}

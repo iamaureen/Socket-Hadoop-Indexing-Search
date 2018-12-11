@@ -8,7 +8,7 @@ public class RandomAccessInputFile {
 	
 	
 	
-	static int countLines (String filePath) throws IOException {
+	public static int countLines (String filePath) throws IOException {
 		
 	    File file = new File(filePath);
         FileInputStream fis = new FileInputStream(file);
@@ -22,9 +22,9 @@ public class RandomAccessInputFile {
         return stringArray.length;
 	}
 	
-	 static String sendToWorker(int worker, String filename, int startPosition, int endPosition) throws IOException{
-		 String filePath = utility.getFilePath(filename);
-		 RandomAccessFile raf = new RandomAccessFile(filePath, "r");
+	 public static String sendToWorker(String filename, int startPosition, int endPosition) throws IOException{
+		 //This filename must be the full canonical path for it to work
+		 RandomAccessFile raf = new RandomAccessFile(filename, "r");
 		 int position = startPosition;
 		 byte[] readData = new byte[(int) raf.length()];
 		
@@ -61,7 +61,7 @@ public class RandomAccessInputFile {
             //System.out.println(sendToWorker(1, filename, 341, 677));
             
            //worker will tokenize the content
-            wordTokenizer.processContent(sendToWorker(1, filename, 341, 677));
+            wordTokenizer.processContent(sendToWorker(filename, 341, 677));
             
             
             

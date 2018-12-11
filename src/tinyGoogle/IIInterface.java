@@ -17,6 +17,7 @@ public class IIInterface {
 
 	public static void setupStructure(String bp) {
 		basePath = bp;
+		
 		// create the structure so it exists
 
 		for (int i = 0; i < dirs.length(); i++) {
@@ -98,6 +99,13 @@ public class IIInterface {
 	}
 
 	public static void main(String[] args) {
+		try {
+			System.out.println(new File("./InvertedIndex").getCanonicalPath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//This creates the structure at the specified directory (note no slash at the end)
 		IIInterface.setupStructure(".");
 		
@@ -122,7 +130,7 @@ public class IIInterface {
 		}
 		
 		//The code below the III structure.
-		IIInterface.deleteStructure();
+		//IIInterface.deleteStructure();
 		
 		
 
