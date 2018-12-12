@@ -84,11 +84,11 @@ public class wordTokenizer {
 		String[] tokenizedInputArray = content.split("\\s+");
 		for (int i =0; i< tokenizedInputArray.length; i++) {
 			wcObj.incrementandAdd(tokenizedInputArray[i]);
-			if(tokenizedInputArray.length/i+1 == 4 && !printed25) {
+			if(tokenizedInputArray.length/(i+1) == 4 && !printed25) {
 				System.out.println("25% of the mapping done");
 				printed25 = true;
 			}
-			if(tokenizedInputArray.length/i+1 == 2 && !printed50) {
+			if(tokenizedInputArray.length/(i+1)== 2 && !printed50) {
 				System.out.println("50% of the mapping done");
 				printed50 = true;
 			}
