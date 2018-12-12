@@ -21,6 +21,7 @@ public class MasterServerThread extends Thread {
 		new MasterConnectionThread(sock).start();
 	}
 	
+	@SuppressWarnings("resource")
 	public void run() {
 		ServerSocket serverSock = null;
 		Socket sock = null;
@@ -36,7 +37,6 @@ public class MasterServerThread extends Thread {
 			try {
 				sock = serverSock.accept();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

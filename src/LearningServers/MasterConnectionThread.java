@@ -18,7 +18,10 @@ public class MasterConnectionThread extends Thread {
 	private Queue<Object> inbox;
 	private int workerBufferSize = 15;
 	private String connectedName;
+
+	@SuppressWarnings("unused")
 	private String connectedHost;
+	@SuppressWarnings("unused")
 	private int connectedPort;
 
 	public MasterConnectionThread(Socket clientSocket) {
@@ -31,7 +34,7 @@ public class MasterConnectionThread extends Thread {
 
 	public boolean placeInOutbox(Object toSend) {
 		try {
-			Thread.sleep((int)Math.random()*250);
+			Thread.sleep((int) Math.random() * 250);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -47,7 +50,7 @@ public class MasterConnectionThread extends Thread {
 
 	public boolean placeInInbox(Object toReceive) {
 		try {
-			Thread.sleep((int)Math.random()*250);
+			Thread.sleep((int) Math.random() * 250);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -91,7 +94,7 @@ public class MasterConnectionThread extends Thread {
 		while (true) {
 			try {
 				try {
-					Thread.sleep((int)Math.random()*250);
+					Thread.sleep((int) Math.random() * 250);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -132,7 +135,7 @@ public class MasterConnectionThread extends Thread {
 				this.socket.close();
 				return;
 			}
-			if (line.startsWith("w-") ||line.startsWith("c-") ) {
+			if (line.startsWith("w-") || line.startsWith("c-")) {
 				this.connectedName = line;
 				Master.addConnection(this, line);
 
@@ -170,7 +173,7 @@ public class MasterConnectionThread extends Thread {
 			} else {
 
 				do {
-					success = Master.WorkQueue.add((Request)obj);
+					success = Master.WorkQueue.add((Request) obj);
 				} while (!success);
 			}
 			// save id for later incase there is double messages
@@ -194,25 +197,22 @@ class MCTInputStreamThread extends Thread {
 	}
 
 	public void run() {
-		try {
+		while (true) {
+
 			try {
-				Thread.sleep((int)Math.random()*250);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			boolean result = false;
-			Object val = ois.readObject();
-			System.out.println("got object");
-			do {
-
-				result = hostThread.placeInInbox(val);
-			} while (!result);
-
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
+				boolean result = false;
+				Object val = ois.readObject();
+				do {
+					result = hostThread.placeInInbox(val);
+				} while (!result);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("Client Closed");
+				break;
+				// e.printStackTrace();
+			} 
 		}
 	}
 
 }
-

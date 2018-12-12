@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -14,12 +13,11 @@ public class ClientToMasterThread extends Thread {
 
 	protected Socket socket;
 
-	private ArrayList<String> JobIDBuffer = new ArrayList<String>();
+	// private ArrayList<String> JobIDBuffer = new ArrayList<String>();
 	private Queue<Object> outbox;
 	private Queue<Object> inbox;
-	private int jobBufferSize = 5;
+	// private int jobBufferSize = 5;
 	private ObjectOutputStream out;
-	
 
 	private boolean goClose = true;
 
@@ -36,7 +34,6 @@ public class ClientToMasterThread extends Thread {
 			return;
 		}
 
-		
 		ObjectInputStream brinp = null;
 		out = null;
 		CTMInputStreamThread is = null;
@@ -49,6 +46,7 @@ public class ClientToMasterThread extends Thread {
 			brinp = new ObjectInputStream(socket.getInputStream());
 			is = new CTMInputStreamThread(brinp, this);
 
+			is.start();
 			// tell the master server who I am
 			System.out.println("sent machine name");
 			out.writeObject(Client.clientName);
@@ -59,13 +57,12 @@ public class ClientToMasterThread extends Thread {
 	}
 
 	public void run() {
-		
 
 		// Here is the communication loop
 		Object obj;
 		while (goClose) {
 			try {
-				Thread.sleep((int)Math.random()*250);
+				Thread.sleep((int) Math.random() * 250);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -104,13 +101,13 @@ public class ClientToMasterThread extends Thread {
 		boolean success = false;
 		do {
 			success = Client.WorkQueue.add(j.getStatus());
-		}while(!success);
+		} while (!success);
 
 	}
 
 	public boolean placeInOutbox(Object toSend) {
 		try {
-			Thread.sleep((int)Math.random()*250);
+			Thread.sleep((int) Math.random() * 250);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -126,7 +123,7 @@ public class ClientToMasterThread extends Thread {
 
 	public boolean placeInInbox(Object toReceive) {
 		try {
-			Thread.sleep((int)Math.random()*250);
+			Thread.sleep((int) Math.random() * 250);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -141,13 +138,13 @@ public class ClientToMasterThread extends Thread {
 	}
 
 	public void close() {
-		goClose  = false;
-		
+		goClose = false;
+
 	}
 
 }
 
-class CTMInputStreamThread {
+class CTMInputStreamThread extends Thread {
 	private ObjectInputStream ois = null;
 	private ClientToMasterThread hostThread = null;
 
@@ -157,15 +154,22 @@ class CTMInputStreamThread {
 	}
 
 	public void run() {
-		try {
-			boolean result = false;
-			Object val = ois.readObject();
-			do {
-				result = hostThread.placeInInbox(val);
-			} while (!result);
+		while (true) {
 
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
+			try {
+				boolean result = false;
+				Object val = ois.readObject();
+				do {
+					result = hostThread.placeInInbox(val);
+				} while (!result);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("Client Closed");
+				break;
+				// e.printStackTrace();
+			} 
+
 		}
 	}
 }

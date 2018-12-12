@@ -47,6 +47,7 @@ public class WorkerToMasterThread extends Thread {
 			brinp = new ObjectInputStream(socket.getInputStream());
 			is = new WTMInputStreamThread(brinp, this);
 
+			is.start();
 			// tell the master server who I am
 			out.writeObject(WorkerBase.workerName);
 			out.flush();
@@ -60,7 +61,7 @@ public class WorkerToMasterThread extends Thread {
 		while (true) {
 			try {
 				try {
-					Thread.sleep((int)Math.random()*250);
+					Thread.sleep((int) Math.random() * 250);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -100,9 +101,9 @@ public class WorkerToMasterThread extends Thread {
 			do {
 				success = WorkerBase.JobQueue.add(obj);
 			} while (!success);
-			
+
 			this.placeInOutbox(j.generateJobAck("job received", WorkerBase.workerName));
-			
+
 			this.JobIDBuffer.add(otherID);
 			if (this.JobIDBuffer.size() > this.jobBufferSize) {
 				this.JobIDBuffer.remove(0);
@@ -112,7 +113,7 @@ public class WorkerToMasterThread extends Thread {
 
 	public boolean placeInOutbox(Object toSend) {
 		try {
-			Thread.sleep((int)Math.random()*250);
+			Thread.sleep((int) Math.random() * 250);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -128,7 +129,7 @@ public class WorkerToMasterThread extends Thread {
 
 	public boolean placeInInbox(Object toReceive) {
 		try {
-			Thread.sleep((int)Math.random()*250);
+			Thread.sleep((int) Math.random() * 250);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -144,7 +145,7 @@ public class WorkerToMasterThread extends Thread {
 
 }
 
-class WTMInputStreamThread {
+class WTMInputStreamThread extends Thread {
 	private ObjectInputStream ois = null;
 	private WorkerToMasterThread hostThread = null;
 
@@ -154,15 +155,21 @@ class WTMInputStreamThread {
 	}
 
 	public void run() {
-		try {
-			boolean result = false;
-			Object val = ois.readObject();
-			do {
-				result = hostThread.placeInInbox(val);
-			} while (!result);
+		while (true) {
+			try {
+				boolean result = false;
+				Object val = ois.readObject();
+				do {
+					result = hostThread.placeInInbox(val);
+				} while (!result);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("Client Closed");
+				break;
+				// e.printStackTrace();
+			}
 
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -2,6 +2,7 @@ package TrashFiles;
 
 public class MapLeaderServer {
 	
+	@SuppressWarnings("unused")
 	void initiateMapper()
     { 
         int n = 8; // TODO: Number of threads from the config file

@@ -5,6 +5,11 @@ import java.io.Serializable;
 public class Request extends Work implements Serializable{
 	//This is the object that the clients will make and send to the server
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5576556429181374267L;
+
 	private String id;
 	
 	//of value index or search

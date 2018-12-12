@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class RequestAck extends Work implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9188739328921951116L;
 	private String id;
 	private String requestId;
 	private String status;
@@ -21,6 +25,14 @@ public class RequestAck extends Work implements Serializable{
 		this.status = status;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public String getRequestId() {
 		return requestId;
 	}

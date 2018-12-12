@@ -85,7 +85,8 @@ public class tinyServer {
         } 
     } 
   
-    public static void main(String args[]) 
+    @SuppressWarnings("unused")
+	public static void main(String args[]) 
     { 
         tinyServer server = new tinyServer(5000); 
     } 

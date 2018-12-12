@@ -52,6 +52,7 @@ public class tinyClient {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String args[]) {
 		tinyClient client = new tinyClient("127.0.0.1", 12345	);
 	}

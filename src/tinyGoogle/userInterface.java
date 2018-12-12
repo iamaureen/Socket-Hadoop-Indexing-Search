@@ -14,7 +14,11 @@ import javax.swing.filechooser.FileSystemView;
 
 public class userInterface extends Frame implements ActionListener {
 	
-	   static Label optionInput;     // Declare input Label
+	   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5291809639411194755L;
+	static Label optionInput;     // Declare input Label
 	   static Label secondInput;    // Declare output Label
 	   static TextField optionInputTextField;  // Declare input TextField
 	   static TextField secondInputTextField; // Declare output TextField

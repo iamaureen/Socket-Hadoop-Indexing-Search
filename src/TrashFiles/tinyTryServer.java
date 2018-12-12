@@ -109,7 +109,8 @@ public class tinyTryServer {
         } 
     } 
   
-    public static void main(String args[]) 
+    @SuppressWarnings("unused")
+	public static void main(String args[]) 
     { 
         tinyTryServer server = new tinyTryServer(5000); 
         

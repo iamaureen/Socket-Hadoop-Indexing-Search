@@ -19,13 +19,18 @@ public class DocumentIndexer {
 	public void parseFile() {
 		String filePath = getFilePath();
 
+		
+
 		BufferedReader br = null;
 		FileReader fr = null;
 
 		int max = 0;
 
 		try {
-
+			//creatong file if it doesn't exist 
+			//https://stackoverflow.com/questions/9620683/java-fileoutputstream-create-file-if-not-exists
+			File yourFile = new File(filePath);
+			yourFile.createNewFile();
 			// br = new BufferedReader(new FileReader(FILENAME));
 			fr = new FileReader(filePath);
 			br = new BufferedReader(fr);
