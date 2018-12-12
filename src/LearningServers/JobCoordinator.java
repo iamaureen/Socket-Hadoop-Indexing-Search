@@ -168,6 +168,16 @@ public class JobCoordinator extends Thread {
 			} while (!success);
 			workersToWait.put(worker, 0);
 		}
+		
+		for (String worker : MyJob.getWorkerArray()) {
+			MasterConnectionThread mct = Master.getMCT(worker);
+			boolean success = false;
+			do {
+				// keep trying to place into outbox until it succeeds
+				success = mct.placeInOutbox(MyJob);
+			} while (!success);
+			workersToWait.put(worker, 0);
+		}
 
 		// wait on initInbox to receive all requests.
 		JobAck ja = null;

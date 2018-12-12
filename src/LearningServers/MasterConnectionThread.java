@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import tinyGoogle.utility;
+
 public class MasterConnectionThread extends Thread {
 	protected Socket socket;
 	private ArrayList<String> WorkIDBuffer = new ArrayList<String>();
@@ -23,8 +25,8 @@ public class MasterConnectionThread extends Thread {
 		this.socket = clientSocket;
 		this.outbox = new ConcurrentLinkedQueue<Object>();
 		this.inbox = new ConcurrentLinkedQueue<Object>();
-		this.connectedHost = Helper.getConnectedHostName(clientSocket);
-		this.connectedPort = Helper.getConnectedPort(clientSocket);
+		this.connectedHost = utility.getConnectedHostName(clientSocket);
+		this.connectedPort = utility.getConnectedPort(clientSocket);
 	}
 
 	public boolean placeInOutbox(Object toSend) {
@@ -52,7 +54,7 @@ public class MasterConnectionThread extends Thread {
 	}
 
 	public String getConnectedHostName() {
-		return Helper.getConnectedHostName(this.socket);
+		return utility.getConnectedHostName(this.socket);
 	}
 
 	public void run() {

@@ -1,10 +1,10 @@
-package tinyGoogle;
+package TrashFiles;
 
 import java.io.*;
 import java.util.*;
 import java.net.*;
 
-public class tinyTryServer {
+public class tinyServer {
 	
 	 //initialize socket and input stream 
     private Socket          socket   = null; 
@@ -13,7 +13,7 @@ public class tinyTryServer {
     private Queue<RequestItem> requestQueue = new LinkedList<>(); ;
   
     // constructor with port 
-    public tinyTryServer(int port) 
+    public tinyServer(int port) 
     { 
         // starts server and waits for a connection 
         try
@@ -40,38 +40,17 @@ public class tinyTryServer {
                 { 
                     line = in.readUTF(); 
                     System.out.println(line); 
-                    
-                    String input = "this is a string string";
-                    WordCount obj1 = convertStringToWordCountObj(input);
-                    
-                    String input1 = "this this is a string mau";
-                    WordCount obj2 = convertStringToWordCountObj(input1);
-                    
-                    obj1.merge(obj2);                      
-                    obj1.printWordCount();
-                    
-                    System.out.println(obj1.convertToString());
-                    
-                    obj1.extract('i','s');
-                   
-                  
                     if(Integer.parseInt(line)==1) {
                     		System.out.println("Call Index Master");
                     		//create request item object and insert into queue
+                    		RequestItem ri = new RequestItem();
                     		
+                    		ri.setRequestType("index");
+                    		ri.setItem("index"); //path 
                     		
-//                    		RequestItem ri = new RequestItem();
-//                    		
-//                    		ri.setRequestType("index");
-//                    		ri.setItem("index"); //path 
-//                    		
-//                    		requestQueue.add(ri);
-//                    		
-//                    		System.out.println("Elements of queue-"+requestQueue);
-//                    		
-//                    		DocumentIndexer di = new DocumentIndexer();
-//                    		di.setDocId(1);
-//                    		System.out.println("doc id :: "+di.getDocId());
+                    		requestQueue.add(ri);
+                    		
+                    		System.out.println("Elements of queue-"+requestQueue);
                     		
                     }else if(Integer.parseInt(line)==2) {
 	                		System.out.println("Call Query Master");
@@ -108,27 +87,32 @@ public class tinyTryServer {
   
     public static void main(String args[]) 
     { 
-        tinyTryServer server = new tinyTryServer(5000); 
-        
-        
+        tinyServer server = new tinyServer(5000); 
     } 
-    
-    static WordCount convertStringToWordCountObj(String input) {
-    	
-    	String[] stringinput = input.split("\\s+"); // splits by whitespace
-        
-        WordCount wcObj = new WordCount();
-        for (String word: stringinput) {
-        		wcObj.incrementandAdd(word);
-        }
-        //wcObj.printWordCount();
-        
-        return wcObj;
-       
-    		
-    }
 
 }
 
 
-
+class RequestItem{
+	private String requestType;
+	private String item; // path if index, query if search
+	
+	public String getRequestType() {
+		return requestType;
+	}
+	public void setRequestType(String requestType) {
+		this.requestType = requestType;
+	}
+	public String getItem() {
+		return item;
+	}
+	public void setItem(String item) {
+		this.item = item;
+	}
+	
+	@Override
+	  public String toString() {
+	    return getRequestType() + " "+ getItem();
+	  }
+		
+}

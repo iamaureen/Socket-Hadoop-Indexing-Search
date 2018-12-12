@@ -1,4 +1,4 @@
-package tinyGoogle;
+package TrashFiles;
 
 public class MapLeaderServer {
 	

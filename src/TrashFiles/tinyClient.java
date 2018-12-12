@@ -1,4 +1,4 @@
-package tinyGoogle;
+package TrashFiles;
 
 import java.io.*;
 import java.net.*;

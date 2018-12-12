@@ -89,7 +89,7 @@ public class Master {
 				try {
 					//initialize the job coordinator
 					String JobID = jc.initJob(toHandle.getRequestType().equals("index"), toHandle.getRequestVal(), toHandle.getMct());
-					//add the job to the mao
+					//add the job to the map
 					jobMap.put(JobID, jc);
 					//send out the job requests
 					jc.sendJobsAndWaitAck();
@@ -99,7 +99,7 @@ public class Master {
 					
 					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					System.err.println("For some reson the file could not be read");
 					e.printStackTrace();
 				}
 				

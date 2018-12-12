@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import tinyGoogle.utility;
+
 public class MasterServerThread extends Thread {
 
 	public MasterServerThread() {
+		
 	}
 
 	public void printstmt() {
@@ -23,7 +26,7 @@ public class MasterServerThread extends Thread {
 		Socket sock = null;
 
 		try {
-			serverSock = new ServerSocket(Helper.MASTERPORT);
+			serverSock = new ServerSocket(utility.MASTERPORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

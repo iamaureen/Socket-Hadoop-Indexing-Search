@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import tinyGoogle.utility;
+
 public class WorkerToMasterThread extends Thread {
 
 	protected Socket socket;
@@ -24,7 +26,7 @@ public class WorkerToMasterThread extends Thread {
 		socket = null;
 
 		try {
-			socket = new Socket(Helper.MASTERHOST, Helper.MASTERPORT);
+			socket = new Socket(utility.MASTERHOST, utility.MASTERPORT);
 
 		} catch (IOException e) {
 			e.printStackTrace();
