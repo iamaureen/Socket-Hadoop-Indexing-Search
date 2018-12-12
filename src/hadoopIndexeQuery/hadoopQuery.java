@@ -31,7 +31,7 @@ public class hadoopQuery {
             //get the search query 
             //System.out.println("from mapper here is the string ::" + query);
 
-            if(wordandfile[0].equals(query)){
+            if(query.contains(wordandfile[0])){
                     output.collect(new Text(lineInputSplit[0]), new IntWritable(Integer.parseInt(lineInputSplit[1])));
             }
             //output.collect(new Text(wordandfile[0]), one);
