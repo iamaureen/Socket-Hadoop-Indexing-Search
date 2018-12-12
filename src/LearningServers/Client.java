@@ -47,7 +47,7 @@ public class Client {
 				+ "\nPress CTRL-C in the next 5 seconds if this is incorrect");
 
 		long seconds = System.nanoTime() / 1000000000;
-		while (System.nanoTime() / 1000000000 < seconds + 5) {
+		while (System.nanoTime() / 1000000000 < seconds + 1) {
 
 		}
 

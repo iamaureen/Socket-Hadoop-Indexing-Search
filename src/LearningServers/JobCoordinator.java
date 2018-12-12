@@ -56,7 +56,7 @@ public class JobCoordinator extends Thread {
 		// this is an index request
 		if (indexJob) {
 			int numLines = FileHandler.countLines(criteria);
-			int numWorkers = Math.min(numLines / 100, Master.WorkerList.size());
+			int numWorkers = Math.min(numLines +100 / 100, Master.WorkerList.size());
 			int numReducers = charSplits.length;
 
 			// gen Map tasks
@@ -219,7 +219,7 @@ public class JobCoordinator extends Thread {
 		HashMap<String, Integer> workersToWait = new HashMap<String, Integer>();
 		String[] content;
 		for (String task : MyJob.getReduceTasks()) {
-			content = task.split("|");
+			content = task.split("\\|");
 
 			workersToWait.put(content[0], 0);
 		}

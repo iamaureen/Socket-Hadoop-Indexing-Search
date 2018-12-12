@@ -111,7 +111,7 @@ public class DocumentIndexer {
 
 		// increase the maximum id present in the file by 1
 		docID = maxID + 1;
-		String toWriteInTheFile = "\n" + docID + " " + path;
+		String toWriteInTheFile = docID + " " + path + "\n";
 		// append into the file with id and path
 		appendStrToFile(getFilePath(), toWriteInTheFile);
 
