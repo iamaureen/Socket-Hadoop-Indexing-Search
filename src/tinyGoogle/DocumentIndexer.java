@@ -121,6 +121,7 @@ public class DocumentIndexer {
 			// Open given file in append mode.
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileName, true));
 			out.write(str);
+			out.flush();
 			out.close();
 		} catch (IOException e) {
 			System.out.println("exception occoured" + e);

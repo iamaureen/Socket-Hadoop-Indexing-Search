@@ -109,6 +109,7 @@ public class MasterConnectionThread extends Thread {
 				// type check and send
 				if (send != null) {
 					out.writeObject(send);
+					out.flush();
 				}
 
 			} catch (IOException e) {

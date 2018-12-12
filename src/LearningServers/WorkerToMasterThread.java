@@ -49,6 +49,7 @@ public class WorkerToMasterThread extends Thread {
 
 			// tell the master server who I am
 			out.writeObject(WorkerBase.workerName);
+			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,6 +78,7 @@ public class WorkerToMasterThread extends Thread {
 				// type check and send
 				if (send != null) {
 					out.writeObject(send);
+					out.flush();
 				}
 
 			} catch (IOException e) {

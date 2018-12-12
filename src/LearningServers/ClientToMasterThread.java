@@ -51,6 +51,7 @@ public class ClientToMasterThread extends Thread {
 			// tell the master server who I am
 			System.out.println("sent machine name");
 			out.writeObject(Client.clientName);
+			out.flush();
 		} catch (IOException e) {
 			System.exit(0);
 		}
@@ -83,6 +84,7 @@ public class ClientToMasterThread extends Thread {
 				if (send != null) {
 					System.out.println("trying to send");
 					out.writeObject(send);
+					out.flush();
 					System.out.println("sent");
 				}
 
