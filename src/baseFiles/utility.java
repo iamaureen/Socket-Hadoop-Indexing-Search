@@ -10,7 +10,7 @@ public class utility {
 	private static String jobDir = null;
 	private static String basePath = ".";
 
-	public static final int MASTERPORT = 12345;
+	public static final int MASTERPORT = 9968;
 	public static final String MASTERHOST = "oxygen.cs.pitt.edu";
 	//public static final String MASTERHOST = "127.0.0.1";
 
