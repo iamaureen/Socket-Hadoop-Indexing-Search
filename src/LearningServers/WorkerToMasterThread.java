@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javafx.concurrent.Worker;
 import tinyGoogle.utility;
 
 public class WorkerToMasterThread extends Thread {

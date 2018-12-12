@@ -11,7 +11,8 @@ public class utility {
 	private static String basePath = ".";
 
 	public static final int MASTERPORT = 12345;
-	public static final String MASTERHOST = "oxygen.cs.pitt.edu";// "127.0.0.1";
+	public static final String MASTERHOST = "oxygen.cs.pitt.edu";
+	//public static final String MASTERHOST = "127.0.0.1";
 
 	// return the file path when a filename is given
 	public static String getFilePath(String filename) {

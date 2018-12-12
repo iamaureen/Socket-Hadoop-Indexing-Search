@@ -237,7 +237,7 @@ public class WorkerBase {
 				return s;
 			}
 		}
-		System.err.println("Worker " + workerName + " got a job it wasn't supposed to");
+		//System.err.println("Worker " + workerName + " got a job it wasn't supposed to");
 		return null;
 	}
 

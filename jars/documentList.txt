@@ -1,3 +1,0 @@
-1 /home/rav/Classwork/OS-CS2510/os-project2/tinyGoogle/jars/Inputs/war_and_peace.txt
-1 /home/rav/Classwork/OS-CS2510/os-project2/tinyGoogle/jars/Inputs/war_and_peace.txt
-2 /home/rav/Classwork/OS-CS2510/os-project2/tinyGoogle/jars/Inputs/twelfthnight
