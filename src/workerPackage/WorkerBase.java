@@ -237,7 +237,7 @@ public class WorkerBase {
 		String path = dind.isDocumentPresentByID(Integer.parseInt(max.word));
 
 		String retval = "Document Found!\n\n" + "It is located here: " + path + "\n" + "With a toal Wordcount of: "
-				+ max.count;
+				+ max.count + "(DONE)";
 
 		return retval;
 	}
