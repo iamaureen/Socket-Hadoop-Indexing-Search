@@ -19,6 +19,17 @@ public class JobSaver {
 
 	public static void saveWC(String id, String start, String end, String workerName, WordCount toSave) {
 		String path = utility.getJobDir() + "/" + id;
+		
+		//create a lock file so that the main file is not read from until it is deleted
+		File lockFile = new File(path+"/"+ start + "-" + end + "-" + workerName + ".wcrilock");
+		try {
+			
+			lockFile.createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 
 		try {
 			FileOutputStream fos = new FileOutputStream(
@@ -34,6 +45,8 @@ public class JobSaver {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		lockFile.delete();
 
 	}
 
@@ -47,7 +60,11 @@ public class JobSaver {
 
 		for (String p : thisJobDir.list()) {
 			if (p.startsWith(checkString)) {
+				
 				retval += 1;
+				if(p.endsWith(".wcrilock")) {
+					return 0;
+				}
 			}
 		}
 

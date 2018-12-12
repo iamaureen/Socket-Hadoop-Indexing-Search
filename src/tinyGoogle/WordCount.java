@@ -53,7 +53,7 @@ public class WordCount implements java.io.Serializable {
 			String pattern = String.valueOf(start);
 			for (Map.Entry<String, Integer> entry : wc.entrySet()) {
 				if(entry.getKey().startsWith(pattern)) {
-					System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+					//System.out.println(entry.getKey() + ":" + entry.getValue().toString());
 					extracted_map.put(entry.getKey(), entry.getValue());
 				}		    
 			}

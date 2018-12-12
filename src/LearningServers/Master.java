@@ -82,7 +82,7 @@ public class Master {
 					String docpath = toHandle.getRequestVal();
 					int id = Dind.isDocumentPresentByPath(docpath);
 					// this file already exists if the id is less than the max id
-					if (id < Dind.getMax()) {
+					if (Dind.checkDocPresent(docpath)){
 						// if so send a request ack back saying this file was already indexed
 						toHandle.getMct().placeInOutbox(new RequestAck("This file was already indexed (DONE)"));
 						// skip rest of logic

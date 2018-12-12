@@ -46,6 +46,10 @@ public class WorkerBase {
 					// reset the retry flag
 					retry = false;
 				}
+				if(ActiveJob.getTargetValue().equals("QUIT") && ActiveJob.isIndexJob()) {
+					System.exit(0);
+				}
+				
 				// indexing request
 				if (ActiveJob.isIndexJob()) {
 
@@ -54,9 +58,7 @@ public class WorkerBase {
 					
 					if (mapTask != null) {
 						content = mapTask.split("\\|");
-						for(int i =0; i < content.length; i++) {
-							System.out.println("\t" + content[i]);
-						}
+						
 						int start = Integer.parseInt(content[1]);
 						int end = Integer.parseInt(content[2]);
 
@@ -71,7 +73,7 @@ public class WorkerBase {
 						}
 
 						// break apart and save
-						//(This is where the real shuffling with the sockets would come into play 
+						//(This is where the real shuffling with the sockets would come into play but we handled shuffling through the afs space.
 						for (String reduceTask : ActiveJob.getReduceTasks()) {
 							content = reduceTask.split("\\|");
 							WordCount toSave = wc.extract(content[1].charAt(0), content[2].charAt(0));
@@ -231,7 +233,7 @@ public class WorkerBase {
 	private static String getTask(String[] assignments) {
 		for (String s : assignments) {
 			if (s.contains(workerName)) {
-				System.out.println(s);
+				//System.out.println(s);
 				return s;
 			}
 		}

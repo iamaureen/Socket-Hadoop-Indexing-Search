@@ -147,6 +147,15 @@ public class DocumentIndexer {
 	 * }
 	 */
 
+	public boolean checkDocPresent(String docpath) {
+		for (DocumentIndex di : DocIdList) {
+			if(di.getDocPath().equals(docpath)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
 
 class DocumentIndex {

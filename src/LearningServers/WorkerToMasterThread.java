@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javafx.concurrent.Worker;
 import tinyGoogle.utility;
 
 public class WorkerToMasterThread extends Thread {
@@ -90,7 +91,19 @@ public class WorkerToMasterThread extends Thread {
 			}
 
 		}
-
+		
+		boolean success = false;
+		Job end = new Job("QUIT",true);
+		do {
+			try {
+				Thread.sleep((int) Math.random() * 250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			success = WorkerBase.JobQueue.add(end);
+		}while(!success);
+		
 	}
 
 	private void handleInput(Object obj) {
@@ -112,8 +125,9 @@ public class WorkerToMasterThread extends Thread {
 			}
 		}
 	}
+
 	public void close() {
-		goClose   = false;
+		goClose = false;
 
 	}
 
@@ -171,7 +185,7 @@ class WTMInputStreamThread extends Thread {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("Client Closed");
+				System.out.println("Server Closed");
 				hostThread.close();
 				break;
 				// e.printStackTrace();

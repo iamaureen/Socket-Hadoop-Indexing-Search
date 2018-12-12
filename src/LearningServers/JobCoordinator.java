@@ -97,7 +97,7 @@ public class JobCoordinator extends Thread {
 
 			Collections.shuffle(workerIndex);
 			String[] mapTasks = new String[numWorkers];
-			for (int i = 0; i < numReducers; i++) {
+			for (int i = 0; i < numWorkers; i++) {
 				String workerName = Master.WorkerList.get(workerIndex.get(i)).getConnectedName();
 				String temp = workerName + "|" + charSplits[i].charAt(0) + "|" + charSplits[i].charAt(1);
 				mapTasks[i] = temp;
@@ -109,6 +109,8 @@ public class JobCoordinator extends Thread {
 			String[] reduceTasks = new String[numReducers];
 			reduceTasks[0] = Master.WorkerList.get(workerIndex.get(0)).getConnectedName() + "|" + "a" + "|" + "z";
 			JobWorkers.add(Master.WorkerList.get(workerIndex.get(0)).getConnectedName());
+			
+			MyJob.setReduceTasks(reduceTasks);
 
 		}
 
@@ -256,7 +258,7 @@ public class JobCoordinator extends Thread {
 		}
 
 		if (MyJob.isIndexJob()) {
-			response = "Indexing is done for " + MyJob.getTargetValue();
+			response = "Indexing is done for " + MyJob.getTargetValue() + "(DONE)";
 		}
 		// send the response now that the work is done
 		boolean success = false;
@@ -269,7 +271,7 @@ public class JobCoordinator extends Thread {
 		
 		//clean up the job files
 		utility.deleteDirectory(new File(utility.getJobDir() + "/" + MyJob.getId()));
-		
+		new File(utility.getJobDir() + "/" + MyJob.getId()).delete();
 		return;
 	}
 
