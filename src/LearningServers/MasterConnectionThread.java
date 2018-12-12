@@ -31,6 +31,12 @@ public class MasterConnectionThread extends Thread {
 
 	public boolean placeInOutbox(Object toSend) {
 		try {
+			Thread.sleep((int)Math.random()*250);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			return this.outbox.add(toSend);
 
 		} catch (Exception e) {
@@ -40,6 +46,12 @@ public class MasterConnectionThread extends Thread {
 	}
 
 	public boolean placeInInbox(Object toReceive) {
+		try {
+			Thread.sleep((int)Math.random()*250);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			return this.inbox.add(toReceive);
 
@@ -78,6 +90,12 @@ public class MasterConnectionThread extends Thread {
 		Object obj;
 		while (true) {
 			try {
+				try {
+					Thread.sleep((int)Math.random()*250);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				// parse input
 				obj = this.inbox.poll();
 
@@ -176,9 +194,17 @@ class MCTInputStreamThread extends Thread {
 
 	public void run() {
 		try {
+			try {
+				Thread.sleep((int)Math.random()*250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			boolean result = false;
 			Object val = ois.readObject();
+			System.out.println("got object");
 			do {
+
 				result = hostThread.placeInInbox(val);
 			} while (!result);
 

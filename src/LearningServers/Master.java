@@ -52,7 +52,12 @@ public class Master {
 		boolean pollAgain = true;
 		while(true) {
 			//handle request
-			
+			try {
+				Thread.sleep((int)Math.random()*250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			toHandle = pollAgain ? WorkQueue.poll() : toHandle;
 			
 			if(pollAgain) {

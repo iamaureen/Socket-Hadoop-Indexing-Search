@@ -58,6 +58,12 @@ public class WorkerToMasterThread extends Thread {
 		Object obj;
 		while (true) {
 			try {
+				try {
+					Thread.sleep((int)Math.random()*250);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				// parse input
 				obj = this.inbox.poll();
 
@@ -104,6 +110,12 @@ public class WorkerToMasterThread extends Thread {
 
 	public boolean placeInOutbox(Object toSend) {
 		try {
+			Thread.sleep((int)Math.random()*250);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			return this.outbox.add(toSend);
 
 		} catch (Exception e) {
@@ -113,6 +125,12 @@ public class WorkerToMasterThread extends Thread {
 	}
 
 	public boolean placeInInbox(Object toReceive) {
+		try {
+			Thread.sleep((int)Math.random()*250);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			return this.inbox.add(toReceive);
 

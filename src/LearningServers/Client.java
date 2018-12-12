@@ -70,6 +70,12 @@ public class Client {
 		System.out.println("placed in outbox");
 		String in = null;
 		while (true) {
+			try {
+				Thread.sleep((int)Math.random()*250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			in = WorkQueue.poll();
 			if (in != null) {
 				System.out.println(in);

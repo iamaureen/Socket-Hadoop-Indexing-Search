@@ -63,7 +63,7 @@ public class ClientToMasterThread extends Thread {
 		Object obj;
 		while (goClose) {
 			try {
-				Thread.sleep(250);
+				Thread.sleep((int)Math.random()*250);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -78,10 +78,12 @@ public class ClientToMasterThread extends Thread {
 
 				// handle output
 				// get front of queue
-				Object send = this.outbox.poll();
+				Request send = (Request) this.outbox.poll();
 				// type check and send
 				if (send != null) {
+					System.out.println("trying to send");
 					out.writeObject(send);
+					System.out.println("sent");
 				}
 
 			} catch (IOException e) {
@@ -105,6 +107,12 @@ public class ClientToMasterThread extends Thread {
 
 	public boolean placeInOutbox(Object toSend) {
 		try {
+			Thread.sleep((int)Math.random()*250);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			return this.outbox.add(toSend);
 
 		} catch (Exception e) {
@@ -114,6 +122,12 @@ public class ClientToMasterThread extends Thread {
 	}
 
 	public boolean placeInInbox(Object toReceive) {
+		try {
+			Thread.sleep((int)Math.random()*250);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			return this.inbox.add(toReceive);
 

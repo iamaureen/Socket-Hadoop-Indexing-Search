@@ -183,6 +183,12 @@ public class JobCoordinator extends Thread {
 		JobAck ja = null;
 		int done = getPercent(workersToWait);
 		while (done < 1) {
+			try {
+				Thread.sleep((int)Math.random()*250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			ja = (JobAck) this.initInbox.poll();
 
 			if (ja != null) {
@@ -222,7 +228,12 @@ public class JobCoordinator extends Thread {
 		String response = "";
 
 		while (done < 1) {
-
+			try {
+				Thread.sleep((int)Math.random()*250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			ja = (JobAck) inbox.poll();
 			if (ja != null) {
 				if (MyJob.isIndexJob()) {
