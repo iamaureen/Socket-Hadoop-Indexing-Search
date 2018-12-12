@@ -59,7 +59,7 @@ public class JobCoordinator extends Thread {
 		// this is an index request
 		if (indexJob) {
 			int numLines = FileHandler.countLines(criteria);
-			int numWorkers = Math.min(numLines +100 / 100, Master.WorkerList.size());
+			int numWorkers = Math.min( (numLines +100) / 100, Master.WorkerList.size());
 			int numReducers = charSplits.length;
 
 			// gen Map tasks
