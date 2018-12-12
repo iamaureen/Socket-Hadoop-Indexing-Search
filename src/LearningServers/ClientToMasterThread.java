@@ -19,7 +19,7 @@ public class ClientToMasterThread extends Thread {
 	// private int jobBufferSize = 5;
 	private ObjectOutputStream out;
 
-	private boolean goClose = true;
+	private volatile boolean goClose = true;
 
 	public ClientToMasterThread() {
 		this.outbox = new ConcurrentLinkedQueue<Object>();

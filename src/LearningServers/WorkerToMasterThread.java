@@ -20,6 +20,8 @@ public class WorkerToMasterThread extends Thread {
 	private Queue<Object> inbox;
 	private int jobBufferSize = 5;
 
+	private volatile boolean goClose = true;
+
 	public WorkerToMasterThread() {
 		this.outbox = new ConcurrentLinkedQueue<Object>();
 		this.inbox = new ConcurrentLinkedQueue<Object>();
@@ -58,7 +60,7 @@ public class WorkerToMasterThread extends Thread {
 
 		// Here is the communication loop
 		Object obj;
-		while (true) {
+		while (goClose) {
 			try {
 				try {
 					Thread.sleep((int) Math.random() * 250);
@@ -109,6 +111,10 @@ public class WorkerToMasterThread extends Thread {
 				this.JobIDBuffer.remove(0);
 			}
 		}
+	}
+	public void close() {
+		goClose   = false;
+
 	}
 
 	public boolean placeInOutbox(Object toSend) {
@@ -166,6 +172,7 @@ class WTMInputStreamThread extends Thread {
 				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Client Closed");
+				hostThread.close();
 				break;
 				// e.printStackTrace();
 			}

@@ -23,6 +23,7 @@ public class MasterConnectionThread extends Thread {
 	private String connectedHost;
 	@SuppressWarnings("unused")
 	private int connectedPort;
+	private volatile boolean goClose = true;
 
 	public MasterConnectionThread(Socket clientSocket) {
 		this.socket = clientSocket;
@@ -71,6 +72,10 @@ public class MasterConnectionThread extends Thread {
 	public String getConnectedHostName() {
 		return utility.getConnectedHostName(this.socket);
 	}
+	public void close() {
+		goClose  = false;
+
+	}
 
 	public void run() {
 		// create the object streams to read on
@@ -91,7 +96,7 @@ public class MasterConnectionThread extends Thread {
 
 		// Here is the communication loop
 		Object obj;
-		while (true) {
+		while (goClose) {
 			try {
 				try {
 					Thread.sleep((int) Math.random() * 250);
@@ -122,6 +127,8 @@ public class MasterConnectionThread extends Thread {
 			}
 
 		}
+		Master.removeConnection(this, this.connectedName);
+
 	}
 
 	// TODO might need to change this method if we change our inputs
@@ -209,6 +216,7 @@ class MCTInputStreamThread extends Thread {
 				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Client Closed");
+				hostThread.close();
 				break;
 				// e.printStackTrace();
 			} 
