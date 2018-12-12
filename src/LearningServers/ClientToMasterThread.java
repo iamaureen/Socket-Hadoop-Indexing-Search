@@ -41,6 +41,7 @@ public class ClientToMasterThread extends Thread {
 		out = null;
 		CTMInputStreamThread is = null;
 		// create the streams
+		//
 
 		try {
 			out = new ObjectOutputStream(socket.getOutputStream());
