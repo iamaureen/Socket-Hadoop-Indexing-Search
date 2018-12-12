@@ -113,7 +113,7 @@ public class MasterConnectionThread extends Thread {
 				this.socket.close();
 				return;
 			}
-			if (line.startsWith("w-") || line.equalsIgnoreCase("client")) {
+			if (line.startsWith("w-") ||line.startsWith("c-") ) {
 				this.connectedName = line;
 				Master.addConnection(this, line);
 
@@ -188,3 +188,4 @@ class MCTInputStreamThread extends Thread {
 	}
 
 }
+

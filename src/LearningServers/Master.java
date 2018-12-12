@@ -33,6 +33,7 @@ public class Master {
 	public static void main(String[] args) {
 		
 		//create the II structure
+		
 		IIInterface.setupStructure(".");
 		utility.setJobDir(".");
 		DocumentIndexer Dind = new DocumentIndexer();
@@ -40,6 +41,7 @@ public class Master {
 		//create the server
 		new MasterServerThread().start();
 
+		
 		
 		
 		
@@ -58,6 +60,8 @@ public class Master {
 			}
 			
 			if(toHandle != null) {
+				System.out.println("Got a request: " + toHandle.getRequestType());
+				toHandle.getMct().placeInOutbox(new RequestAck("This file was already indexed (DONE)"));
 				//check if I need to do anything
 				//if the active request is index and this request is search then don't do anything, vice versa
 				if(!toHandle.getRequestType().equals(currentRequestType) && !currentRequestType.equals("")) {
@@ -74,7 +78,7 @@ public class Master {
 					//this file already exists if the id is less than the max id
 					if(id<Dind.getMax()) {
 						//if so send a request ack back saying this file was already indexed
-						toHandle.getMct().placeInOutbox(new RequestAck("This file was already indexed"));
+						toHandle.getMct().placeInOutbox(new RequestAck("This file was already indexed (DONE)"));
 						//skip rest of logic
 						continue;
 					}
@@ -118,10 +122,11 @@ public class Master {
 	}
 
 	public static void addConnection(MasterConnectionThread masterConnectionThread, String line) {
+		System.out.println("Got a machine " + line);
 		if (line.startsWith("w-") && !WorkerList.contains(masterConnectionThread)) {
 			WorkerList.add(masterConnectionThread);
 		}
-		if (line.equalsIgnoreCase("client") && !ClientList.contains(masterConnectionThread)) {
+		if (line.startsWith("c-") && !ClientList.contains(masterConnectionThread)) {
 			ClientList.add(masterConnectionThread);
 		}
 	}

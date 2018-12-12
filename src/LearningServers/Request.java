@@ -1,6 +1,8 @@
 package LearningServers;
 
-public class Request extends Work{
+import java.io.Serializable;
+
+public class Request extends Work implements Serializable{
 	//This is the object that the clients will make and send to the server
 	
 	private String id;

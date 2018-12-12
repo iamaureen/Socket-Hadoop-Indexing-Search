@@ -1,8 +1,9 @@
 package LearningServers;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class JobAck extends Work {
+public class JobAck extends Work implements Serializable{
 	private String id;
 	private String jobId;
 	private String status;
