@@ -59,6 +59,8 @@ public class WorkerBase {
 					String mapTask = getTask(ActiveJob.getMapTasks());
 					
 					if (mapTask != null) {
+						System.out.println(workerName + "Started his mapping task");
+
 						content = mapTask.split("\\|");
 						
 						int start = Integer.parseInt(content[1]);
@@ -88,6 +90,8 @@ public class WorkerBase {
 					// handle reducing task
 					String reduceTask = getTask(ActiveJob.getReduceTasks());
 					if (reduceTask != null) {
+						System.out.println(workerName + "Started his reducing task");
+
 						content = reduceTask.split("\\|");
 
 						// wait until all of the files have been created
@@ -130,6 +134,8 @@ public class WorkerBase {
 					// handle mapping task
 					String mapTask = getTask(ActiveJob.getMapTasks());
 					if (mapTask != null) {
+						System.out.println(workerName + "Started his reducing task");
+
 						content = mapTask.split("\\|");
 
 						char start = content[1].charAt(0);
@@ -154,6 +160,8 @@ public class WorkerBase {
 					// handle reducing task
 					String reduceTask = getTask(ActiveJob.getReduceTasks());
 					if (reduceTask != null) {
+						System.out.println(workerName + "Started his reducing task");
+
 						// this is really a pointless content as we don't care about the other values
 						content = reduceTask.split("\\|");
 						// wait until all of the files have been created
