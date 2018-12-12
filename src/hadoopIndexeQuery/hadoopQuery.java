@@ -59,7 +59,9 @@ public class hadoopQuery {
         //Scanner sc = new Scanner(System.in);
         //String inputPath = sc.nextLine();
 
-
+		long start = System.currentTimeMillis();
+       
+        
         //check file exists or not:
         FileSystem fs = FileSystem.get(new Configuration());
         Path indexDir = new Path(args[0]+"/part-00000");
@@ -88,5 +90,8 @@ public class hadoopQuery {
         FileInputFormat.setInputPaths(conf, new Path(args[0]));
         FileOutputFormat.setOutputPath(conf, new Path(args[1]));
         JobClient.runJob(conf);
+        
+        start = System.currentTimeMillis() - start;
+        System.out.println(start + " ms");
 	}
 }

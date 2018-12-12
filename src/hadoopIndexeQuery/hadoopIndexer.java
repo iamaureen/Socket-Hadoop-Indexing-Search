@@ -54,6 +54,9 @@ public class hadoopIndexer {
 	}
 	
 	public static void main(String[] args) throws Exception{
+		
+		long start = System.currentTimeMillis();
+		
 		System.out.println("\nPlease enter the HDFS path of the file(s) to index.: ");
         Scanner sc = new Scanner(System.in);
         String inputPath = sc.nextLine();
@@ -69,5 +72,8 @@ public class hadoopIndexer {
         invertedIndex.setOutputKeyClass(Text.class);
         invertedIndex.setOutputValueClass(IntWritable.class);
         invertedIndex.waitForCompletion(true);
+        
+        start = System.currentTimeMillis() - start;
+        System.out.println(start + " ms");
 	}
 }
