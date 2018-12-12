@@ -81,6 +81,8 @@ public class WorkerBase {
 							WordCount toSave = wc.extract(content[1].charAt(0), content[2].charAt(0));
 							JobSaver.saveWC(ActiveJob.getId(), content[1], content[2], workerName, toSave);
 						}
+						
+						System.out.println(workerName + "Got his mapping task done");
 
 					}
 					// handle reducing task
@@ -119,7 +121,7 @@ public class WorkerBase {
 							// keep trying to place into outbox until it succeeds
 							success = commThread.placeInOutbox(ja);
 						} while (!success);
-
+						System.out.println(workerName + "Got his reducing task done");
 					}
 
 				}
@@ -147,7 +149,7 @@ public class WorkerBase {
 						}
 
 						JobSaver.saveSearchList(ActiveJob.getId(), termsToSave, workerName);
-
+						System.out.println(workerName + "Got his mapping task done");
 					}
 					// handle reducing task
 					String reduceTask = getTask(ActiveJob.getReduceTasks());
@@ -191,7 +193,7 @@ public class WorkerBase {
 							// keep trying to place into outbox until it succeeds
 							success = commThread.placeInOutbox(ja);
 						} while (!success);
-
+						System.out.println(workerName + "Got his reducing task done");
 					}
 
 				}
@@ -246,6 +248,7 @@ public class WorkerBase {
 	public static WordCount countWords(String path, int start, int end) {
 		try {
 			String toParse = FileHandler.sendToWorker(path, start, end);
+			System.out.println(workerName + " Read in the file");
 			return wordTokenizer.processContent(toParse);
 
 		} catch (IOException e) {

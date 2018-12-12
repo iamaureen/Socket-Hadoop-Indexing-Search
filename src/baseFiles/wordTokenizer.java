@@ -79,9 +79,19 @@ public class wordTokenizer {
 
 		// create word count object
 		WordCount wcObj = new WordCount();
+		boolean printed25 = false;
+		boolean printed50 = false;
 		String[] tokenizedInputArray = content.split("\\s+");
-		for (String word : tokenizedInputArray) {
-			wcObj.incrementandAdd(word);
+		for (int i =0; i< tokenizedInputArray.length; i++) {
+			wcObj.incrementandAdd(tokenizedInputArray[i]);
+			if(tokenizedInputArray.length/i == 4 && !printed25) {
+				System.out.println("25% of the mapping done");
+				printed25 = true;
+			}
+			if(tokenizedInputArray.length/i == 2 && !printed50) {
+				System.out.println("50% of the mapping done");
+				printed50 = true;
+			}
 		}
 		// wcObj.printWordCount();
 
