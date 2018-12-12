@@ -10,12 +10,16 @@ import org.apache.hadoop.io.Text;
 
 
 public class hadoopQuery {
-	
+
 	public static class QueryMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable>{
 		private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
         String query;
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> RavBranch
         @Override
         public void configure(JobConf job) {
             super.configure(job);
@@ -28,7 +32,11 @@ public class hadoopQuery {
             String[] wordandfile = lineInputSplit[0].split("@"); // splits the word and filename
 
             //https://stackoverflow.com/questions/8457183/passing-parameters-to-map-function-in-hadoop
+<<<<<<< HEAD
             //get the search query 
+=======
+            //get the search query
+>>>>>>> RavBranch
             //System.out.println("from mapper here is the string ::" + query);
 
             if(query.contains(wordandfile[0])){
@@ -38,9 +46,13 @@ public class hadoopQuery {
             //output.collect(new Text(query), one);
 
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> RavBranch
 	}
-	
+
 	public static class QueryReducer extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable>{
 		public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException
         {
@@ -52,16 +64,22 @@ public class hadoopQuery {
                 output.collect(key, new IntWritable(sum));
         }
 	}
-	
+
 	public static void main(String[] args) throws Exception{
 		//user input
         //System.out.println("\nPlease enter query ");
         //Scanner sc = new Scanner(System.in);
         //String inputPath = sc.nextLine();
 
+<<<<<<< HEAD
 		long start = System.currentTimeMillis();
        
         
+=======
+		long start = System.nanoTime();
+
+
+>>>>>>> RavBranch
         //check file exists or not:
         FileSystem fs = FileSystem.get(new Configuration());
         Path indexDir = new Path(args[0]+"/part-00000");
@@ -90,8 +108,13 @@ public class hadoopQuery {
         FileInputFormat.setInputPaths(conf, new Path(args[0]));
         FileOutputFormat.setOutputPath(conf, new Path(args[1]));
         JobClient.runJob(conf);
+<<<<<<< HEAD
         
         start = System.currentTimeMillis() - start;
+=======
+
+        start = System.nanoTime(); - start;
+>>>>>>> RavBranch
         System.out.println(start + " ms");
 	}
 }

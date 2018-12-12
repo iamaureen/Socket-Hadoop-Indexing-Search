@@ -10,7 +10,7 @@ import org.apache.hadoop.io.Text;
 
 
 public class hadoopIndexer {
-	
+
 	public static class IndexMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable>
 	  {
 	    private final static IntWritable one = new IntWritable(1);
@@ -40,7 +40,7 @@ public class hadoopIndexer {
 	    }
 	 }
 
-	
+
 	public static class IndexReducer extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable>{
 		public void IndexReducer(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException
         {
@@ -52,11 +52,17 @@ public class hadoopIndexer {
                 output.collect(key, new IntWritable(sum));
         }
 	}
-	
+
 	public static void main(String[] args) throws Exception{
+<<<<<<< HEAD
 		
 		long start = System.currentTimeMillis();
 		
+=======
+
+		long start = System.nanoTime();
+
+>>>>>>> RavBranch
 		System.out.println("\nPlease enter the HDFS path of the file(s) to index.: ");
         Scanner sc = new Scanner(System.in);
         String inputPath = sc.nextLine();
@@ -72,8 +78,13 @@ public class hadoopIndexer {
         invertedIndex.setOutputKeyClass(Text.class);
         invertedIndex.setOutputValueClass(IntWritable.class);
         invertedIndex.waitForCompletion(true);
+<<<<<<< HEAD
         
         start = System.currentTimeMillis() - start;
+=======
+
+        start = System.nanoTime(); - start;
+>>>>>>> RavBranch
         System.out.println(start + " ms");
 	}
 }
