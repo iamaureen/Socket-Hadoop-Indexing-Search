@@ -1,4 +1,6 @@
-package LearningServers;
+package baseFiles;
+
+import masterPackage.MasterConnectionThread;
 
 public class Work {
 	//template object to represent the work to be done

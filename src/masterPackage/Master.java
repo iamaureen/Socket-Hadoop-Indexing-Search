@@ -1,4 +1,4 @@
-package LearningServers;
+package masterPackage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import tinyGoogle.DocumentIndexer;
-import tinyGoogle.IIInterface;
-import tinyGoogle.utility;
+import baseFiles.DocumentIndexer;
+import baseFiles.IIInterface;
+import baseFiles.Request;
+import baseFiles.RequestAck;
+import baseFiles.utility;
 
 public class Master {
 

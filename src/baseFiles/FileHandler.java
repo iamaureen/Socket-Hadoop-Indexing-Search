@@ -1,4 +1,4 @@
-package tinyGoogle;
+package baseFiles;
 
 import java.io.File;
 import java.io.FileInputStream;

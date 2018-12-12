@@ -1,4 +1,4 @@
-package tinyGoogle;
+package baseFiles;
 
 public class WCPair {
 public String word;

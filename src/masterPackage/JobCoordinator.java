@@ -1,4 +1,4 @@
-package LearningServers;
+package masterPackage;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +9,11 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import tinyGoogle.FileHandler;
-import tinyGoogle.utility;
+import baseFiles.FileHandler;
+import baseFiles.Job;
+import baseFiles.JobAck;
+import baseFiles.RequestAck;
+import baseFiles.utility;
 
 public class JobCoordinator extends Thread {
 

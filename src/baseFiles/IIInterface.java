@@ -1,4 +1,4 @@
-package tinyGoogle;
+package baseFiles;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

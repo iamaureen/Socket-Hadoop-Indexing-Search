@@ -1,4 +1,4 @@
-package LearningServers;
+package workerPackage;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,8 +12,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import tinyGoogle.WordCount;
-import tinyGoogle.utility;
+import baseFiles.WordCount;
+import baseFiles.utility;
 
 public class JobSaver {
 

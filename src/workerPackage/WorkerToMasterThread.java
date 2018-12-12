@@ -1,27 +1,29 @@
-package LearningServers;
+package workerPackage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import tinyGoogle.utility;
+import baseFiles.Job;
+import baseFiles.utility;
 
-public class ClientToMasterThread extends Thread {
+public class WorkerToMasterThread extends Thread {
 
 	protected Socket socket;
 
-	// private ArrayList<String> JobIDBuffer = new ArrayList<String>();
+	private ArrayList<String> JobIDBuffer = new ArrayList<String>();
+	// this outbox should only have job acks
 	private Queue<Object> outbox;
 	private Queue<Object> inbox;
-	// private int jobBufferSize = 5;
-	private ObjectOutputStream out;
+	private int jobBufferSize = 5;
 
 	private volatile boolean goClose = true;
 
-	public ClientToMasterThread() {
+	public WorkerToMasterThread() {
 		this.outbox = new ConcurrentLinkedQueue<Object>();
 		this.inbox = new ConcurrentLinkedQueue<Object>();
 		socket = null;
@@ -34,40 +36,39 @@ public class ClientToMasterThread extends Thread {
 			return;
 		}
 
+	}
+
+	public void run() {
 		ObjectInputStream brinp = null;
-		out = null;
-		CTMInputStreamThread is = null;
+		ObjectOutputStream out = null;
+		WTMInputStreamThread is = null;
 		// create the streams
-		//
 
 		try {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			brinp = new ObjectInputStream(socket.getInputStream());
-			is = new CTMInputStreamThread(brinp, this);
+			is = new WTMInputStreamThread(brinp, this);
 
 			is.start();
 			// tell the master server who I am
-			System.out.println("sent machine name");
-			out.writeObject(Client.clientName);
+			out.writeObject(WorkerBase.workerName);
 			out.flush();
 		} catch (IOException e) {
-			System.exit(0);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	}
-
-	public void run() {
 
 		// Here is the communication loop
 		Object obj;
 		while (goClose) {
 			try {
-				Thread.sleep((int) Math.random() * 250);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			try {
+				try {
+					Thread.sleep((int) Math.random() * 250);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				// parse input
 				obj = this.inbox.poll();
 
@@ -77,17 +78,11 @@ public class ClientToMasterThread extends Thread {
 
 				// handle output
 				// get front of queue
-				Request send = (Request) this.outbox.poll();
+				Object send = this.outbox.poll();
 				// type check and send
 				if (send != null) {
-					System.out.println("trying to send");
 					out.writeObject(send);
 					out.flush();
-					System.out.println("sent");
-					Client.startTime = System.nanoTime();
-					System.out.println("The start time for this request is " + Client.startTime + "ns ");
-					
-					
 				}
 
 			} catch (IOException e) {
@@ -96,16 +91,43 @@ public class ClientToMasterThread extends Thread {
 			}
 
 		}
-
+		
+		boolean success = false;
+		Job end = new Job("QUIT",true);
+		do {
+			try {
+				Thread.sleep((int) Math.random() * 250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			success = WorkerBase.JobQueue.add(end);
+		}while(!success);
+		
 	}
 
 	private void handleInput(Object obj) {
 		// this worker to master thread will only get jobs from master
-		RequestAck j = (RequestAck) obj;
-		boolean success = false;
-		do {
-			success = Client.WorkQueue.add(j.getStatus());
-		} while (!success);
+		Job j = (Job) obj;
+
+		String otherID = j.getId();
+		if (!this.JobIDBuffer.contains(otherID)) {
+			boolean success = false;
+			do {
+				success = WorkerBase.JobQueue.add(obj);
+			} while (!success);
+
+			this.placeInOutbox(j.generateJobAck("job received", WorkerBase.workerName));
+
+			this.JobIDBuffer.add(otherID);
+			if (this.JobIDBuffer.size() > this.jobBufferSize) {
+				this.JobIDBuffer.remove(0);
+			}
+		}
+	}
+
+	public void close() {
+		goClose = false;
 
 	}
 
@@ -141,25 +163,19 @@ public class ClientToMasterThread extends Thread {
 		return false;
 	}
 
-	public void close() {
-		goClose = false;
-
-	}
-
 }
 
-class CTMInputStreamThread extends Thread {
+class WTMInputStreamThread extends Thread {
 	private ObjectInputStream ois = null;
-	private ClientToMasterThread hostThread = null;
+	private WorkerToMasterThread hostThread = null;
 
-	public CTMInputStreamThread(ObjectInputStream val, ClientToMasterThread host) {
+	public WTMInputStreamThread(ObjectInputStream val, WorkerToMasterThread host) {
 		ois = val;
 		hostThread = host;
 	}
 
 	public void run() {
 		while (true) {
-
 			try {
 				boolean result = false;
 				Object val = ois.readObject();
@@ -169,10 +185,11 @@ class CTMInputStreamThread extends Thread {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("Client Closed");
+				System.out.println("Server Closed");
+				hostThread.close();
 				break;
 				// e.printStackTrace();
-			} 
+			}
 
 		}
 	}

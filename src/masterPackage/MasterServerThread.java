@@ -1,10 +1,10 @@
-package LearningServers;
+package masterPackage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import tinyGoogle.utility;
+import baseFiles.utility;
 
 public class MasterServerThread extends Thread {
 

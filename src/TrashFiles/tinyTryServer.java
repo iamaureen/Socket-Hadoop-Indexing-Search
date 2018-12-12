@@ -3,7 +3,7 @@ package TrashFiles;
 import java.io.*;
 import java.util.*;
 
-import tinyGoogle.WordCount;
+import baseFiles.WordCount;
 
 import java.net.*;
 

@@ -1,4 +1,4 @@
-package LearningServers;
+package masterPackage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import tinyGoogle.utility;
+import baseFiles.JobAck;
+import baseFiles.Request;
+import baseFiles.Work;
+import baseFiles.utility;
 
 public class MasterConnectionThread extends Thread {
 	protected Socket socket;

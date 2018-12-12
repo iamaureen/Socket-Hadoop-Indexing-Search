@@ -1,4 +1,4 @@
-package tinyGoogle;
+package baseFiles;
 
 import java.util.ArrayList;
 import java.util.HashMap;

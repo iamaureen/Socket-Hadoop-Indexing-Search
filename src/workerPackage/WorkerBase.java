@@ -1,4 +1,4 @@
-package LearningServers;
+package workerPackage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import tinyGoogle.DocumentIndexer;
-import tinyGoogle.IIInterface;
-import tinyGoogle.FileHandler;
-import tinyGoogle.WCPair;
-import tinyGoogle.WordCount;
-import tinyGoogle.utility;
-import tinyGoogle.wordTokenizer;
+import baseFiles.DocumentIndexer;
+import baseFiles.FileHandler;
+import baseFiles.IIInterface;
+import baseFiles.Job;
+import baseFiles.JobAck;
+import baseFiles.WCPair;
+import baseFiles.WordCount;
+import baseFiles.utility;
+import baseFiles.wordTokenizer;
 
 public class WorkerBase {
 
