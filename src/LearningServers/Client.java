@@ -9,6 +9,8 @@ public class Client {
 
 	public static ConcurrentLinkedQueue<String> WorkQueue = new ConcurrentLinkedQueue<String>();
 	public static String clientName = "c-" + UUID.randomUUID().toString();
+	public static long startTime = 0;
+	public static long endTime = 0;
 
 	public static void main(String[] args) {
 		// input check
@@ -35,7 +37,7 @@ public class Client {
 		}
 
 		if (args[0].equals("search")) {
-			term = args[1];
+			term = args[1].toLowerCase();
 		}
 
 		if (term == null) {
@@ -47,7 +49,7 @@ public class Client {
 				+ "\nPress CTRL-C in the next 5 seconds if this is incorrect");
 
 		long seconds = System.nanoTime() / 1000000000;
-		while (System.nanoTime() / 1000000000 < seconds + 1) {
+		while (System.nanoTime() / 1000000000 < seconds + 5) {
 
 		}
 
@@ -83,6 +85,11 @@ public class Client {
 				if (in.contains("DONE")) {
 					System.out.println("Closing");
 					CTM.close();
+					endTime = System.nanoTime();
+					System.out.println("The end time for this request is " + endTime + "ns ");
+					
+					System.out.println("The total time to handle this request is \n" + (endTime-startTime));
+					
 					System.exit(0);
 				}
 

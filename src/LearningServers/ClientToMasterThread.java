@@ -84,6 +84,10 @@ public class ClientToMasterThread extends Thread {
 					out.writeObject(send);
 					out.flush();
 					System.out.println("sent");
+					Client.startTime = System.nanoTime();
+					System.out.println("The start time for this request is " + Client.startTime + "ns ");
+					
+					
 				}
 
 			} catch (IOException e) {

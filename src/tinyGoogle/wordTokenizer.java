@@ -25,6 +25,7 @@ public class wordTokenizer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return content.toString();
 	}
 
@@ -39,7 +40,9 @@ public class wordTokenizer {
 			String sCurrentLine;
 			while ((sCurrentLine = br.readLine()) != null) {
 				// System.out.println(sCurrentLine);
-				stopwords.add(sCurrentLine);
+				if (!sCurrentLine.startsWith("#")) {
+					stopwords.add(sCurrentLine);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -56,7 +59,8 @@ public class wordTokenizer {
 		// replace punctuation
 		// https://www.geeksforgeeks.org/removing-punctuations-given-string/
 		// removing digits and punctuation from string
-		content = content.replaceAll("\\p{Punct}", " ").replaceAll("\\d", " ").replaceAll("\\n", " ").replaceAll("\\s+", " ").toLowerCase();
+		content = content.replaceAll("\\p{Punct}", " ").replaceAll("\\d", " ").replaceAll("\\n", " ")
+				.replaceAll("\\s+", " ").toLowerCase();
 
 		// get the stop words
 		Set<String> stopwords = getStopWords();
@@ -71,7 +75,7 @@ public class wordTokenizer {
 		}
 		// content without the stop words
 		content = withoutStopWords.toString();
-		//System.out.println(content);
+		// System.out.println(content);
 
 		// create word count object
 		WordCount wcObj = new WordCount();
@@ -79,14 +83,14 @@ public class wordTokenizer {
 		for (String word : tokenizedInputArray) {
 			wcObj.incrementandAdd(word);
 		}
-		//wcObj.printWordCount();
+		// wcObj.printWordCount();
 
 		return wcObj;
 	}
 
-	/*public static void main(String[] args) throws FileNotFoundException {
-		String content = readFile();
-		processContent(content);
-	}*/
+	/*
+	 * public static void main(String[] args) throws FileNotFoundException { String
+	 * content = readFile(); processContent(content); }
+	 */
 
 }
